@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurs Qiymət Kalkulyatoru</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eaaf66 0%, #c5710b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #da8f03;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(218, 143, 3, 0.1);
+        }
+
+        .price-result {
+            background: linear-gradient(135deg, #da8f03, #c5710b);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(218, 143, 3, 0.3);
+            transform: scale(0.98);
+            transition: transform 0.3s ease;
+        }
+
+        .price-result.active {
+            transform: scale(1);
+        }
+
+        .price-label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .price-details {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .calculator-form {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 600px) {
+            .calculator-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .price-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>LIB Qiymət Kalkulyatoru</h1>
+        
+        <form class="calculator-form">
+            <div class="form-group">
+                <label for="language">Dil:</label>
+                <select id="language" onchange="calculatePrice()">
+                    <option value="">Dil seçin</option>
+                    <option value="english">İngilis dili</option>
+                    <option value="russian">Rus dili</option>
+                    <option value="german">Alman dili</option>
+                    <option value="france">Fransız dili</option>
+                    <option value="ielts">IELTS</option>
+                    <option value="duolingo">DUOLINGO</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="courseType">Kurs növü:</label>
+                <select id="courseType" onchange="calculatePrice()">
+                    <option value="">Kurs növü seçin</option>
+                    <option value="group">Qrup</option>
+                    <option value="individual">Fərdi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="schedule">Cədvəl:</label>
+                <select id="schedule" onchange="calculatePrice()">
+                    <option value="">Cədvəl seçin</option>
+                </select>
+            </div>
+
+            <div class="price-result" id="priceResult">
+                <div class="price-label">Ümumi Qiymət</div>
+                <div class="price-amount" id="priceAmount">0 ₼</div>
+                <div class="price-details" id="priceDetails">Seçiminizi edin</div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Qiymət cədvəli
+        const priceTable = {
+            english: {
+                group: {
+                    "2x1.5": 105 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 165,   // 2 dəfə 1 saat
+                    "2x1.5": 205  // 2 dəfə 1.5 saat
+                }
+            },
+            russian: {
+                group: {
+                    "2x1.5": 95 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 145,   // 2 dəfə 1 saat
+                    "2x1.5": 185, // 2 dəfə 1.5 saat
+                    "3x1": 185    // 3 dəfə 1 saat
+                }
+            },
+            german: {
+                group: {
+                    "2x1.5": 125 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 185,   // 2 dəfə 1 saat
+                    "2x1.5": 225, // 2 dəfə 1.5 saat
+                    "3x1": 225    // 3 dəfə 1 saat
+                }
+            },
+             france: {
+                group: {
+                    "2x1.5": 105 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 165,   // 2 dəfə 1 saat
+                    "2x1.5": 205  // 2 dəfə 1.5 saat
+                }
+            },
+             ielts: {
+                group: {
+                    "2x1.5": 175 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 275,   // 2 dəfə 1 saat
+                    "2x1.5": 325,  // 2 dəfə 1.5 saat
+                    "3x1": 325    // 3 dəfə 1 saat
+                }
+            },
+             duolingo: {
+                group: {
+                    "2x1.5": 175 // 2 dəfə 1.5 saat
+                },
+                individual: {
+                    "2x1": 275,   // 2 dəfə 1 saat
+                    "2x1.5": 325,  // 2 dəfə 1.5 saat
+                    "3x1": 325    // 3 dəfə 1 saat
+                }
+            },
+        };
+
+        // Cədvəl seçimlərini yeniləmək
+        function updateScheduleOptions() {
+            const language = document.getElementById('language').value;
+            const courseType = document.getElementById('courseType').value;
+            const scheduleSelect = document.getElementById('schedule');
+            
+            // Cədvəl seçimini təmizləmək
+            scheduleSelect.innerHTML = '<option value="">Cədvəl seçin</option>';
+            
+            if (language && courseType && priceTable[language] && priceTable[language][courseType]) {
+                const schedules = priceTable[language][courseType];
+                
+                for (const schedule in schedules) {
+                    const option = document.createElement('option');
+                    option.value = schedule;
+                    
+                    // Mətnin formatlanması
+                    let text = '';
+                    if (schedule === '2x1') {
+                        text = 'Həftədə 2 dəfə, 1 saat';
+                    } else if (schedule === '2x1.5') {
+                        text = 'Həftədə 2 dəfə, 1.5 saat';
+                    } else if (schedule === '3x1') {
+                        text = 'Həftədə 3 dəfə, 1 saat';
+                    }
+                    
+                    option.textContent = text;
+                    scheduleSelect.appendChild(option);
+                }
+            }
+        }
+
+        function calculatePrice() {
+            const language = document.getElementById('language').value;
+            const courseType = document.getElementById('courseType').value;
+            const schedule = document.getElementById('schedule').value;
+            
+            const priceResult = document.getElementById('priceResult');
+            const priceAmount = document.getElementById('priceAmount');
+            const priceDetails = document.getElementById('priceDetails');
+
+            // Cədvəl seçimlərini yeniləmək
+            if (!schedule) {
+                updateScheduleOptions();
+            }
+
+            if (!language || !courseType || !schedule) {
+                priceAmount.textContent = '0 ₼';
+                priceDetails.textContent = 'Seçiminizi edin';
+                priceResult.classList.remove('active');
+                return;
+            }
+
+            const price = priceTable[language][courseType][schedule];
+            
+            if (price) {
+                // Məlumatları hazırlamaq
+                const languageText = language === 'english' ? 'İngilis dili' : 'Rus dili';
+                const courseTypeText = courseType === 'group' ? 'Qrup' : 'Fərdi';
+                
+                let scheduleText = '';
+                if (schedule === '2x1') {
+                    scheduleText = '2 dəfə × 1 saat';
+                } else if (schedule === '2x1.5') {
+                    scheduleText = '2 dəfə × 1.5 saat';
+                } else if (schedule === '3x1') {
+                    scheduleText = '3 dəfə × 1 saat';
+                }
+
+                // Nəticəni göstərmək
+                priceAmount.textContent = `${price} ₼`;
+                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}`;
+                priceResult.classList.add('active');
+            }
+        }
+
+        // Dil və kurs növü dəyişdiyində cədvəl seçimlərini yeniləmək
+        document.getElementById('language').addEventListener('change', function() {
+            document.getElementById('schedule').value = '';
+            updateScheduleOptions();
+            calculatePrice();
+        });
+
+        document.getElementById('courseType').addEventListener('change', function() {
+            document.getElementById('schedule').value = '';
+            updateScheduleOptions();
+            calculatePrice();
+        });
+
+        // Səhifə yüklənəndə ilkin hesablama
+        document.addEventListener('DOMContentLoaded', function() {
+            calculatePrice();
+        });
+    </script>
+</body>
+</html>
