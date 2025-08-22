@@ -3,17 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurs Qiymət Kalkulyatoru</title>
+    <title>LIB Qiymət Kalkulyatoru</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        #floatingSymbolsContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.floating-icon {
+    position: absolute;
+    opacity: 0.1;
+    font-size: 20px;
+    color: #000;
+}
+
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #eaaf66 0%, #c5710b 100%);
+            background: linear-gradient(135deg, #fa0505 0%, #ffffff 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,10 +44,18 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
+            padding: 20px 40px;
             width: 100%;
             max-width: 500px;
             animation: fadeIn 0.6s ease-out;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 10px auto;
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
         }
 
         @keyframes fadeIn {
@@ -42,10 +69,15 @@
             margin-bottom: 30px;
             font-size: 2rem;
             font-weight: 600;
+        
         }
 
         .form-group {
             margin-bottom: 25px;
+        }
+
+        .form-group.hidden {
+            display: none;
         }
 
         label {
@@ -68,19 +100,19 @@
 
         select:focus, input:focus {
             outline: none;
-            border-color: #da8f03;
+            border-color: #da1503;
             background: white;
             box-shadow: 0 0 0 3px rgba(218, 143, 3, 0.1);
         }
 
         .price-result {
-            background: linear-gradient(135deg, #da8f03, #c5710b);
+            background: linear-gradient(135deg, #f20d05, #e3a3a3);
             color: white;
             padding: 25px;
             border-radius: 15px;
             text-align: center;
             margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(218, 143, 3, 0.3);
+            box-shadow: 0 10px 30px rgba(231, 229, 229, 0.3);
             transform: scale(0.98);
             transition: transform 0.3s ease;
         }
@@ -115,9 +147,20 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
+        .teacher-highlight {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #da0303 !important;
+        }
+
         @media (max-width: 600px) {
             .calculator-container {
                 padding: 20px;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 15px;
             }
             
             h1 {
@@ -128,23 +171,36 @@
                 font-size: 2rem;
             }
         }
+        
     </style>
 </head>
 <body>
+    <div id="floatingSymbolsContainer"></div>
+
+
     <div class="calculator-container">
+        <img src="logo.png" alt="LIB Logo" class="logo" onerror="this.style.display='none'">
         <h1>LIB Qiymət Kalkulyatoru</h1>
         
         <form class="calculator-form">
             <div class="form-group">
                 <label for="language">Dil:</label>
-                <select id="language" onchange="calculatePrice()">
+                <select id="language" onchange="updateTeachers(); calculatePrice()">
                     <option value="">Dil seçin</option>
                     <option value="english">İngilis dili</option>
                     <option value="russian">Rus dili</option>
                     <option value="german">Alman dili</option>
                     <option value="france">Fransız dili</option>
                     <option value="ielts">IELTS</option>
+                    <option value="preielts">Pre-IELTS</option>
                     <option value="duolingo">DUOLINGO</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="teacherGroup">
+                <label for="teacher">Müəllim:</label>
+                <select id="teacher" onchange="calculatePrice()">
+                    <option value="">Müəllim seçin</option>
                 </select>
             </div>
 
@@ -153,6 +209,8 @@
                 <select id="courseType" onchange="calculatePrice()">
                     <option value="">Kurs növü seçin</option>
                     <option value="group">Qrup</option>
+                    <option value="closed2">2 nəfərlik qapalı qrup</option>
+                    <option value="closed3">3 nəfərlik qapalı qrup</option>
                     <option value="individual">Fərdi</option>
                 </select>
             </div>
@@ -170,6 +228,12 @@
                 <div class="price-details" id="priceDetails">Seçiminizi edin</div>
             </div>
         </form>
+        <div style="text-align: center; margin-top: 25px;">
+    <a href="https://wa.me/994518867895" target="_blank" 
+       style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease;">
+        📞 Əlaqə (WhatsApp)
+    </a>
+</div>
     </div>
 
     <script>
@@ -179,14 +243,35 @@
                 group: {
                     "2x1.5": 105 // 2 dəfə 1.5 saat
                 },
+                closed2: {
+                    "2x1": 160,   // 2 dəfə 1 saat
+                    "2x1.5": 190, // 2 dəfə 1.5 saat
+                    "3x1": 190    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 105,   // 2 dəfə 1 saat
+                    "2x1.5": 120, // 2 dəfə 1.5 saat
+                    "3x1": 120    // 3 dəfə 1 saat
+                },
                 individual: {
-                    "2x1": 165,   // 2 dəfə 1 saat
-                    "2x1.5": 205  // 2 dəfə 1.5 saat
+                    "2x1": 190,   // 2 dəfə 1 saat
+                    "2x1.5": 240, // 2 dəfə 1.5 saat
+                    "3x1": 240    // 3 dəfə 1 saat
                 }
             },
             russian: {
                 group: {
                     "2x1.5": 95 // 2 dəfə 1.5 saat
+                },
+                closed2: {
+                    "2x1": 125,   // 2 dəfə 1 saat
+                    "2x1.5": 135, // 2 dəfə 1.5 saat
+                    "3x1": 135    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 105,   // 2 dəfə 1 saat
+                    "2x1.5": 115, // 2 dəfə 1.5 saat
+                    "3x1": 115    // 3 dəfə 1 saat
                 },
                 individual: {
                     "2x1": 145,   // 2 dəfə 1 saat
@@ -198,42 +283,146 @@
                 group: {
                     "2x1.5": 125 // 2 dəfə 1.5 saat
                 },
+                closed2: {
+                    "2x1": 170,   // 2 dəfə 1 saat
+                    "2x1.5": 200, // 2 dəfə 1.5 saat
+                    "3x1": 200    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 110,   // 2 dəfə 1 saat
+                    "2x1.5": 130, // 2 dəfə 1.5 saat
+                    "3x1": 130    // 3 dəfə 1 saat
+                },
                 individual: {
-                    "2x1": 185,   // 2 dəfə 1 saat
-                    "2x1.5": 225, // 2 dəfə 1.5 saat
-                    "3x1": 225    // 3 dəfə 1 saat
+                    "2x1": 195,   // 2 dəfə 1 saat
+                    "2x1.5": 255, // 2 dəfə 1.5 saat
+                    "3x1": 255    // 3 dəfə 1 saat
                 }
             },
              france: {
-                group: {
+               group: {
                     "2x1.5": 105 // 2 dəfə 1.5 saat
                 },
+                closed2: {
+                    "2x1": 160,   // 2 dəfə 1 saat
+                    "2x1.5": 190, // 2 dəfə 1.5 saat
+                    "3x1": 190    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 105,   // 2 dəfə 1 saat
+                    "2x1.5": 120, // 2 dəfə 1.5 saat
+                    "3x1": 120    // 3 dəfə 1 saat
+                },
                 individual: {
-                    "2x1": 165,   // 2 dəfə 1 saat
-                    "2x1.5": 205  // 2 dəfə 1.5 saat
+                    "2x1": 190,   // 2 dəfə 1 saat
+                    "2x1.5": 240, // 2 dəfə 1.5 saat
+                    "3x1": 240    // 3 dəfə 1 saat
                 }
             },
              ielts: {
                 group: {
-                    "2x1.5": 175 // 2 dəfə 1.5 saat
+                    "2x1.5": 190 // 2 dəfə 1.5 saat
+                },
+                closed2: {
+                    "2x1": 200,   // 2 dəfə 1 saat
+                    "2x1.5": 240, // 2 dəfə 1.5 saat
+                    "3x1": 240    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 200,   // 2 dəfə 1 saat
+                    "2x1.5": 220, // 2 dəfə 1.5 saat
+                    "3x1": 220    // 3 dəfə 1 saat
                 },
                 individual: {
-                    "2x1": 275,   // 2 dəfə 1 saat
-                    "2x1.5": 325,  // 2 dəfə 1.5 saat
-                    "3x1": 325    // 3 dəfə 1 saat
+                    "2x1": 280,   // 2 dəfə 1 saat
+                    "2x1.5": 350,  // 2 dəfə 1.5 saat
+                    "3x1": 350    // 3 dəfə 1 saat
                 }
             },
+             preielts: {
+                group: {
+                    "2x1.5": 180 // 2 dəfə 1.5 saat
+                },
+                closed2: {
+                    "2x1": 190,   // 2 dəfə 1 saat
+                    "2x1.5": 230, // 2 dəfə 1.5 saat
+                    "3x1": 230    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 190,   // 2 dəfə 1 saat
+                    "2x1.5": 210, // 2 dəfə 1.5 saat
+                    "3x1": 210    // 3 dəfə 1 saat
+                },
+                individual: {
+                    "2x1": 270,   // 2 dəfə 1 saat
+                    "2x1.5": 340,  // 2 dəfə 1.5 saat
+                    "3x1": 340    // 3 dəfə 1 saat
+                }
+            },
+            
              duolingo: {
                 group: {
-                    "2x1.5": 175 // 2 dəfə 1.5 saat
+                    "2x1.5": 190 // 2 dəfə 1.5 saat
+                },
+                closed2: {
+                    "2x1": 200,   // 2 dəfə 1 saat
+                    "2x1.5": 240, // 2 dəfə 1.5 saat
+                    "3x1": 240    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 200,   // 2 dəfə 1 saat
+                    "2x1.5": 220, // 2 dəfə 1.5 saat
+                    "3x1": 220    // 3 dəfə 1 saat
                 },
                 individual: {
-                    "2x1": 275,   // 2 dəfə 1 saat
-                    "2x1.5": 325,  // 2 dəfə 1.5 saat
-                    "3x1": 325    // 3 dəfə 1 saat
+                    "2x1": 280,   // 2 dəfə 1 saat
+                    "2x1.5": 350,  // 2 dəfə 1.5 saat
+                    "3x1": 350    // 3 dəfə 1 saat
                 }
             },
+
         };
+
+        // Müəllimlər cədvəli
+        const teacherTable = {
+            english: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
+            russian: ['İrade', 'Minare', 'Gulnar', 'Leyla'],
+            france: ['Briliant'],
+            german: ['Natiq'],
+            ielts: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
+            preielts: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
+            duolingo: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale']
+        };
+
+        // Müəllimləri yeniləmək
+        function updateTeachers() {
+            const language = document.getElementById('language').value;
+            const teacherSelect = document.getElementById('teacher');
+            const teacherGroup = document.getElementById('teacherGroup');
+            
+            // Müəllim seçimini təmizləmək
+            teacherSelect.innerHTML = '<option value="">Müəllim seçin</option>';
+            
+            if (language && teacherTable[language]) {
+                // Müəllim qrupunu göstərmək
+                teacherGroup.classList.remove('hidden');
+                
+                // Müəllimləri əlavə etmək
+                teacherTable[language].forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.toLowerCase();
+                    option.textContent = teacher;
+                    teacherSelect.appendChild(option);
+                });
+                
+                // Müəllim seçimini vurğulamaq
+                teacherSelect.classList.add('teacher-highlight');
+            } else {
+                // Müəllim qrupunu gizlətmək
+                teacherGroup.classList.add('hidden');
+                teacherSelect.classList.remove('teacher-highlight');
+            }
+        }
 
         // Cədvəl seçimlərini yeniləmək
         function updateScheduleOptions() {
@@ -269,6 +458,7 @@
 
         function calculatePrice() {
             const language = document.getElementById('language').value;
+            const teacher = document.getElementById('teacher').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
             
@@ -292,8 +482,24 @@
             
             if (price) {
                 // Məlumatları hazırlamaq
-                const languageText = language === 'english' ? 'İngilis dili' : 'Rus dili';
-                const courseTypeText = courseType === 'group' ? 'Qrup' : 'Fərdi';
+                let languageText = '';
+                switch(language) {
+                    case 'english': languageText = 'İngilis dili'; break;
+                    case 'russian': languageText = 'Rus dili'; break;
+                    case 'german': languageText = 'Alman dili'; break;
+                    case 'france': languageText = 'Fransız dili'; break;
+                    case 'ielts': languageText = 'IELTS'; break;
+                    case 'preielts': languageText = 'Pre-IELTS'; break;
+                    case 'duolingo': languageText = 'DUOLINGO'; break;
+                }
+                
+                let courseTypeText = '';
+                switch(courseType) {
+                    case 'group': courseTypeText = 'Qrup'; break;
+                    case 'closed2': courseTypeText = '2 nəfərlik qapalı qrup'; break;
+                    case 'closed3': courseTypeText = '3 nəfərlik qapalı qrup'; break;
+                    case 'individual': courseTypeText = 'Fərdi'; break;
+                }
                 
                 let scheduleText = '';
                 if (schedule === '2x1') {
@@ -304,20 +510,32 @@
                     scheduleText = '3 dəfə × 1 saat';
                 }
 
+                // Müəllim məlumatını əlavə etmək
+                let teacherText = '';
+                if (teacher && teacherTable[language]) {
+                    const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
+                    if (teacherName) {
+                        teacherText = ` - Müəllim: ${teacherName}`;
+                    }
+                }
+
                 // Nəticəni göstərmək
                 priceAmount.textContent = `${price} ₼`;
-                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}`;
+                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}${teacherText}`;
                 priceResult.classList.add('active');
             }
         }
 
-        // Dil və kurs növü dəyişdiyində cədvəl seçimlərini yeniləmək
+        // Dil dəyişdiyində müəllim və cədvəl seçimlərini yeniləmək
         document.getElementById('language').addEventListener('change', function() {
+            document.getElementById('teacher').value = '';
             document.getElementById('schedule').value = '';
+            updateTeachers();
             updateScheduleOptions();
             calculatePrice();
         });
 
+        // Kurs növü dəyişdiyində cədvəl seçimini yeniləmək
         document.getElementById('courseType').addEventListener('change', function() {
             document.getElementById('schedule').value = '';
             updateScheduleOptions();
@@ -328,6 +546,71 @@
         document.addEventListener('DOMContentLoaded', function() {
             calculatePrice();
         });
+        
+      const container = document.getElementById('floatingSymbolsContainer');
+    const calculator = document.querySelector('.calculator-container');
+
+    const icons = [
+        'fa-language',
+        'fa-globe',
+        'fa-book',
+        'fa-headphones',
+        'fa-pencil-alt',
+        'fa-comment-dots',
+        'fa-spell-check',
+        'fa-chalkboard-teacher',
+        'fa-flag',
+        'fa-keyboard',
+        'fa-file-alt'
+    ];
+
+    const numberOfIcons = 40;
+
+    function isOutsideCalculator(left, top, iconSize) {
+        const calcRect = calculator.getBoundingClientRect();
+        const buffer = 30; // İkon kalkulyatora çox yaxın olmasın deyə
+
+        return (
+            left + iconSize < calcRect.left - buffer ||         // soldan kənarda
+            left > calcRect.right + buffer ||                   // sağdan kənarda
+            top + iconSize < calcRect.top - buffer ||           // yuxarıdan
+            top > calcRect.bottom + buffer                      // aşağıdan
+        );
+    }
+
+    function placeIcons() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        for (let i = 0; i < numberOfIcons; i++) {
+            let icon = document.createElement('i');
+            icon.className = `fas floating-icon ${icons[Math.floor(Math.random() * icons.length)]}`;
+            
+            let iconSize = Math.random() * 30 + 20;
+            let left, top;
+
+            // Kalkulyatorun üstünə düşməməsi üçün uyğun yer tapana qədər təkrar
+            let maxTries = 100;
+            let tries = 0;
+
+            do {
+                left = Math.random() * vw;
+                top = Math.random() * vh;
+                tries++;
+            } while (!isOutsideCalculator(left, top, iconSize) && tries < maxTries);
+
+            icon.style.left = left + 'px';
+            icon.style.top = top + 'px';
+            icon.style.fontSize = iconSize + 'px';
+            icon.style.opacity = Math.random() * 0.4 + 0.1;
+
+            container.appendChild(icon);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        placeIcons();
+    });
     </script>
 </body>
 </html>
