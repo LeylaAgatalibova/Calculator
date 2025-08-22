@@ -154,12 +154,12 @@
 
         @media (max-width: 600px) {
             .calculator-container {
-                padding: 20px;
+                padding: 15px 20px;
             }
             
             .logo {
-                width: 80px;
-                height: 80px;
+                width: 120px;
+                height: 120px;
                 margin-bottom: 15px;
             }
             
@@ -170,6 +170,12 @@
             .price-amount {
                 font-size: 2rem;
             }
+            @media (max-width: 858px) {
+    #floatingSymbolsContainer {
+        display: none;
+    }
+}
+
         }
         
     </style>
@@ -229,9 +235,10 @@
             </div>
         </form>
         <div style="text-align: center; margin-top: 25px;">
-    <a href="https://wa.me/994518867895" target="_blank" 
+    <a href="https://wa.me/994552384002" target="_blank" 
+    title="Dərslər və kampaniyalar haqqında ətraflı məlumat almaq üçün əlaqə saxlayın"
        style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease;">
-        📞 Əlaqə (WhatsApp)
+        📞 Sifariş edin
     </a>
 </div>
     </div>
@@ -385,13 +392,13 @@
 
         // Müəllimlər cədvəli
         const teacherTable = {
-            english: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
-            russian: ['İrade', 'Minare', 'Gulnar', 'Leyla'],
-            france: ['Briliant'],
-            german: ['Natiq'],
-            ielts: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
-            preielts: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale'],
-            duolingo: ['Leman', 'Miraziz', 'Cemile', 'Vaqif', 'Lemany', 'Xeyale']
+            english: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Cəmilə İsaqova', 'Vaqif Səfərov', 'Ləman Mehrəliyeva','Hacıyeva Nəzrin', 'Xəyalə Əliyeva'],
+            russian: ['İradə Babayeva', 'Minarə Rüstəmli', 'Gülnar Nəciyeva'],
+            france: ['Brilyant Zeynalabdinova'],
+            german: ['Natiq Kərimov'],
+            ielts: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',],
+            preielts: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',],
+            duolingo: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',]
         };
 
         // Müəllimləri yeniləmək
