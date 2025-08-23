@@ -105,6 +105,41 @@
             box-shadow: 0 0 0 3px rgba(218, 143, 3, 0.1);
         }
 
+        .time-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-option:hover {
+            background: #f0f0f0;
+            border-color: #da1503;
+        }
+
+        .time-option.selected {
+            background: #da1503;
+            color: white;
+            border-color: #da1503;
+        }
+
+        .time-option input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto;
+            padding: 0;
+        }
+
         .price-result {
             background: linear-gradient(135deg, #f20d05, #e3a3a3);
             color: white;
@@ -138,6 +173,13 @@
             opacity: 0.8;
         }
 
+        .price-breakdown {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
         .calculator-form {
             animation: slideIn 0.8s ease-out;
         }
@@ -150,6 +192,171 @@
         .teacher-highlight {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border: 2px solid #da0303 !important;
+        }
+
+        /* Order Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .order-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .order-modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .order-form {
+            margin-bottom: 20px;
+        }
+
+        .order-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .order-form label {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .order-summary h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .order-summary-item {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.cancel {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #dee2e6;
+        }
+
+        .modal-btn.confirm {
+            background: #25D366;
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #22c55e;
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .success-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .error-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         @media (max-width: 600px) {
@@ -170,19 +377,31 @@
             .price-amount {
                 font-size: 2rem;
             }
-            @media (max-width: 858px) {
-    #floatingSymbolsContainer {
-        display: none;
-    }
-}
 
+            .time-selection {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .order-modal {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            @media (max-width: 858px) {
+                #floatingSymbolsContainer {
+                    display: none;
+                }
+            }
         }
         
     </style>
 </head>
 <body>
     <div id="floatingSymbolsContainer"></div>
-
 
     <div class="calculator-container">
         <img src="logo.png" alt="LIB Logo" class="logo" onerror="this.style.display='none'">
@@ -228,19 +447,82 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label>Sizə uyğun dərs vaxtını seçin (bir neçəsini seçə bilərsiniz):</label>
+                <div class="time-selection">
+                    <div class="time-option" onclick="toggleTimeSelection('09:00')">
+                        <input type="checkbox" id="time_0900" value="09:00">
+                        <label for="time_0900">09:00</label>
+                    </div>
+                    <div class="time-option" onclick="toggleTimeSelection('11:00')">
+                        <input type="checkbox" id="time_1100" value="11:00">
+                        <label for="time_1100">11:00</label>
+                    </div>
+                    <div class="time-option" onclick="toggleTimeSelection('13:00')">
+                        <input type="checkbox" id="time_1300" value="13:00">
+                        <label for="time_1300">13:00</label>
+                    </div>
+                    <div class="time-option" onclick="toggleTimeSelection('15:00')">
+                        <input type="checkbox" id="time_1500" value="15:00">
+                        <label for="time_1500">15:00</label>
+                    </div>
+                    <div class="time-option" onclick="toggleTimeSelection('17:00')">
+                        <input type="checkbox" id="time_1700" value="17:00">
+                        <label for="time_1700">17:00</label>
+                    </div>
+                    <div class="time-option" onclick="toggleTimeSelection('19:00')">
+                        <input type="checkbox" id="time_1900" value="19:00">
+                        <label for="time_1900">19:00</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="price-result" id="priceResult">
                 <div class="price-label">Ümumi Qiymət</div>
                 <div class="price-amount" id="priceAmount">0 ₼</div>
                 <div class="price-details" id="priceDetails">Seçiminizi edin</div>
+                <div class="price-breakdown" id="priceBreakdown"></div>
             </div>
         </form>
         <div style="text-align: center; margin-top: 25px;">
-    <a href="https://wa.me/994552384002" target="_blank" 
-    title="Dərslər və kampaniyalar haqqında ətraflı məlumat almaq üçün əlaqə saxlayın"
-       style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease;">
-        📞 Sifariş edin
-    </a>
-</div>
+            <button onclick="openOrderModal();"
+                    title="Dərslər və kampaniyalar haqqında ətraflı məlumat almaq üçün əlaqə saxlayın"
+                    style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease; border: none; cursor: pointer;">
+                📞 Sifariş edin
+            </button>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal-overlay">
+        <div class="order-modal">
+            <div class="modal-header">
+                <h2>Sifariş Təsdiqi</h2>
+                <p>Sifarişinizi təsdiqləmək üçün məlumatlarınızı daxil edin</p>
+            </div>
+            
+            <div class="order-summary" id="orderSummary">
+                <h3>Sifariş xülasəsi:</h3>
+                <div id="summaryContent"></div>
+            </div>
+            
+            <form class="order-form" id="orderForm">
+                <div class="form-group">
+                    <label for="customerName">Ad və Soyad *</label>
+                    <input type="text" id="customerName" placeholder="Adınızı və soyadınızı daxil edin" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerPhone">Əlaqə nömrəsi *</label>
+                    <input type="tel" id="customerPhone" placeholder="Telefon nömrənizi daxil edin" required>
+                </div>
+            </form>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeOrderModal()">Ləğv et</button>
+                <button class="modal-btn confirm" onclick="confirmOrder()">Sifarişi təsdiq et</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -392,14 +674,93 @@
 
         // Müəllimlər cədvəli
         const teacherTable = {
-            english: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Cəmilə İsaqova', 'Vaqif Səfərov', 'Ləman Mehrəliyeva','Hacıyeva Nəzrin', 'Xəyalə Əliyeva'],
-            russian: ['İradə Babayeva', 'Minarə Rüstəmli', 'Gülnar Nəciyeva'],
-            france: ['Brilyant Zeynalabdinova'],
-            german: ['Natiq Kərimov'],
-            ielts: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',],
-            preielts: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',],
-            duolingo: ['Ləman Mirzəzadə', 'Mirəziz Seyidov', 'Vaqif Səfərov',]
+            english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.İ', 'Vaqif.S', 'Ləman.M','Hacıyeva.N', 'Xəyalə.Ə'],
+            russian: ['İradə.B', 'Minarə.B', 'Gülnar.N'],
+            france: ['Brilyant.Z'],
+            german: ['Natiq.K'],
+            ielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
+            preielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
+            duolingo: ['Ləman.M', 'Mirəziz.S', 'Vaqif.S',]
         };
+
+        // Notification functions
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `${type}-message show`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 4000);
+        }
+
+        // Language mapping function
+        function getLanguageText(language) {
+            const languageMap = {
+                'english': 'İngilis dili',
+                'russian': 'Rus dili',
+                'german': 'Alman dili',
+                'france': 'Fransız dili',
+                'ielts': 'IELTS',
+                'preielts': 'Pre-IELTS',
+                'duolingo': 'DUOLINGO'
+            };
+            return languageMap[language] || language;
+        }
+
+        // Course type mapping function
+        function getCourseTypeText(courseType) {
+            const courseTypeMap = {
+                'group': 'Qrup',
+                'closed2': '2 nəfərlik qapalı qrup',
+                'closed3': '3 nəfərlik qapalı qrup',
+                'individual': 'Fərdi'
+            };
+            return courseTypeMap[courseType] || courseType;
+        }
+
+        // Schedule mapping function
+        function getScheduleText(schedule) {
+            const scheduleMap = {
+                '2x1': 'Həftədə 2 dəfə, 1 saat',
+                '2x1.5': 'Həftədə 2 dəfə, 1.5 saat',
+                '3x1': 'Həftədə 3 dəfə, 1 saat'
+            };
+            return scheduleMap[schedule] || schedule;
+        }
+
+        // Vaxt seçimi funksiyası
+        function toggleTimeSelection(time) {
+            const timeId = time.replace(':', '');
+            const checkbox = document.getElementById(`time_${timeId}`);
+            const timeOption = checkbox.parentElement;
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                timeOption.classList.add('selected');
+            } else {
+                timeOption.classList.remove('selected');
+            }
+            
+            calculatePrice();
+        }
+
+        // Seçilmiş vaxtları almaq
+        function getSelectedTimes() {
+            const times = [];
+            const checkboxes = document.querySelectorAll('.time-option input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    times.push(checkbox.value);
+                }
+            });
+            return times;
+        }
 
         // Müəllimləri yeniləmək
         function updateTeachers() {
@@ -446,18 +807,7 @@
                 for (const schedule in schedules) {
                     const option = document.createElement('option');
                     option.value = schedule;
-                    
-                    // Mətnin formatlanması
-                    let text = '';
-                    if (schedule === '2x1') {
-                        text = 'Həftədə 2 dəfə, 1 saat';
-                    } else if (schedule === '2x1.5') {
-                        text = 'Həftədə 2 dəfə, 1.5 saat';
-                    } else if (schedule === '3x1') {
-                        text = 'Həftədə 3 dəfə, 1 saat';
-                    }
-                    
-                    option.textContent = text;
+                    option.textContent = getScheduleText(schedule);
                     scheduleSelect.appendChild(option);
                 }
             }
@@ -468,10 +818,12 @@
             const teacher = document.getElementById('teacher').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
+            const selectedTimes = getSelectedTimes();
             
             const priceResult = document.getElementById('priceResult');
             const priceAmount = document.getElementById('priceAmount');
             const priceDetails = document.getElementById('priceDetails');
+            const priceBreakdown = document.getElementById('priceBreakdown');
 
             // Cədvəl seçimlərini yeniləmək
             if (!schedule) {
@@ -481,41 +833,28 @@
             if (!language || !courseType || !schedule) {
                 priceAmount.textContent = '0 ₼';
                 priceDetails.textContent = 'Seçiminizi edin';
+                priceBreakdown.textContent = '';
                 priceResult.classList.remove('active');
                 return;
             }
 
-            const price = priceTable[language][courseType][schedule];
+            let basePrice = priceTable[language][courseType][schedule];
+            let extraCharge = 0;
+            let breakdown = '';
             
-            if (price) {
+            if (basePrice) {
+                // 19:00 saatı üçün fərdi dərslərdə əlavə haqqı yoxlamaq
+                if (courseType === 'individual' && selectedTimes.includes('19:00')) {
+                    extraCharge = 30;
+                    breakdown = `Əsas qiymət: ${basePrice}₼ + 19:00 saatı üçün əlavə: ${extraCharge}₼`;
+                }
+
+                const totalPrice = basePrice + extraCharge;
+
                 // Məlumatları hazırlamaq
-                let languageText = '';
-                switch(language) {
-                    case 'english': languageText = 'İngilis dili'; break;
-                    case 'russian': languageText = 'Rus dili'; break;
-                    case 'german': languageText = 'Alman dili'; break;
-                    case 'france': languageText = 'Fransız dili'; break;
-                    case 'ielts': languageText = 'IELTS'; break;
-                    case 'preielts': languageText = 'Pre-IELTS'; break;
-                    case 'duolingo': languageText = 'DUOLINGO'; break;
-                }
-                
-                let courseTypeText = '';
-                switch(courseType) {
-                    case 'group': courseTypeText = 'Qrup'; break;
-                    case 'closed2': courseTypeText = '2 nəfərlik qapalı qrup'; break;
-                    case 'closed3': courseTypeText = '3 nəfərlik qapalı qrup'; break;
-                    case 'individual': courseTypeText = 'Fərdi'; break;
-                }
-                
-                let scheduleText = '';
-                if (schedule === '2x1') {
-                    scheduleText = '2 dəfə × 1 saat';
-                } else if (schedule === '2x1.5') {
-                    scheduleText = '2 dəfə × 1.5 saat';
-                } else if (schedule === '3x1') {
-                    scheduleText = '3 dəfə × 1 saat';
-                }
+                const languageText = getLanguageText(language);
+                const courseTypeText = getCourseTypeText(courseType);
+                const scheduleText = getScheduleText(schedule);
 
                 // Müəllim məlumatını əlavə etmək
                 let teacherText = '';
@@ -526,10 +865,187 @@
                     }
                 }
 
+                // Seçilmiş vaxtları göstərmək
+                let timeText = '';
+                if (selectedTimes.length > 0) {
+                    timeText = ` - Seçilmiş vaxtlar: ${selectedTimes.join(', ')}`;
+                }
+
                 // Nəticəni göstərmək
-                priceAmount.textContent = `${price} ₼`;
-                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}${teacherText}`;
+                priceAmount.textContent = `${totalPrice} ₼`;
+                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}${teacherText}${timeText}`;
+                priceBreakdown.textContent = breakdown;
                 priceResult.classList.add('active');
+            }
+        }
+
+        // Order Modal Functions
+        function openOrderModal() {
+            const language = document.getElementById('language').value;
+            const courseType = document.getElementById('courseType').value;
+            const schedule = document.getElementById('schedule').value;
+            
+            if (!language || !courseType || !schedule) {
+                showNotification('Zəhmət olmasa əvvəlcə bütün sahələri doldurun', 'error');
+                return;
+            }
+            
+            updateOrderSummary();
+            document.getElementById('orderModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Clear form
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+        }
+
+        function updateOrderSummary() {
+            const language = document.getElementById('language').value;
+            const teacher = document.getElementById('teacher').value;
+            const courseType = document.getElementById('courseType').value;
+            const schedule = document.getElementById('schedule').value;
+            const selectedTimes = getSelectedTimes();
+            
+            const languageText = getLanguageText(language);
+            const courseTypeText = getCourseTypeText(courseType);
+            const scheduleText = getScheduleText(schedule);
+
+            let teacherText = '';
+            if (teacher && teacherTable[language]) {
+                const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
+                if (teacherName) {
+                    teacherText = teacherName;
+                }
+            }
+
+            const basePrice = priceTable[language][courseType][schedule];
+            const extraCharge = (courseType === 'individual' && selectedTimes.includes('19:00')) ? 30 : 0;
+            const totalPrice = basePrice + extraCharge;
+
+            let summaryHTML = `
+                <div class="order-summary-item"><strong>Dil:</strong> ${languageText}</div>
+                <div class="order-summary-item"><strong>Kurs növü:</strong> ${courseTypeText}</div>
+                <div class="order-summary-item"><strong>Cədvəl:</strong> ${scheduleText}</div>
+            `;
+            
+            if (teacherText) {
+                summaryHTML += `<div class="order-summary-item"><strong>Müəllim:</strong> ${teacherText}</div>`;
+            }
+            
+            if (selectedTimes.length > 0) {
+                summaryHTML += `<div class="order-summary-item"><strong>Seçilmiş vaxtlar:</strong> ${selectedTimes.join(', ')}</div>`;
+            }
+            
+            summaryHTML += `<div class="order-summary-item" style="margin-top: 10px; font-size: 1.1rem;"><strong>Ümumi qiymət: ${totalPrice} ₼</strong></div>`;
+            
+            document.getElementById('summaryContent').innerHTML = summaryHTML;
+        }
+
+        async function confirmOrder() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            
+            if (!name || !phone) {
+                showNotification('Zəhmət olmasa bütün sahələri doldurun', 'error');
+                return;
+            }
+            
+            // Disable confirm button to prevent multiple submissions
+            const confirmBtn = document.querySelector('.modal-btn.confirm');
+            const originalText = confirmBtn.textContent;
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Göndərilir...';
+            
+            // Get order details
+            const language = document.getElementById('language').value;
+            const teacher = document.getElementById('teacher').value;
+            const courseType = document.getElementById('courseType').value;
+            const schedule = document.getElementById('schedule').value;
+            const selectedTimes = getSelectedTimes();
+            
+            const languageText = getLanguageText(language);
+            const courseTypeText = getCourseTypeText(courseType);
+            const scheduleText = getScheduleText(schedule);
+
+            let teacherText = '';
+            if (teacher && teacherTable[language]) {
+                const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
+                if (teacherName) {
+                    teacherText = teacherName;
+                }
+            }
+
+            const basePrice = priceTable[language][courseType][schedule];
+            const extraCharge = (courseType === 'individual' && selectedTimes.includes('19:00')) ? 30 : 0;
+            const totalPrice = basePrice + extraCharge;
+
+            try {
+                // Send data to SheetDB
+                const response = await fetch('https://sheetdb.io/api/v1/dr8gpj3ecy8i3', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        data: [{
+                            'Ad və Soyad': name,
+                            'Telefon': phone,
+                            'Dil': languageText,
+                            'Müəllim': teacherText || 'Seçilməyib',
+                            'Kurs': courseTypeText,
+                            'Cədvəl': scheduleText,
+                            'Vaxtlar': selectedTimes.join(', ') || 'Seçilməyib',
+                            'Qiymət': `${totalPrice} ₼`,
+                            'Tarix': new Date().toLocaleDateString('az-AZ')
+                        }]
+                    })
+                });
+
+                if (response.ok) {
+                    // Create WhatsApp message
+                    let message = `🎓 *LIB Dil Kursları - Yeni Sifariş*%0A%0A`;
+                    message += `👤 *Müştəri:* ${name}%0A`;
+                    message += `📞 *Telefon:* ${phone}%0A%0A`;
+                    message += `📚 *Kurs Məlumatları:*%0A`;
+                    message += `• Dil: ${languageText}%0A`;
+                    message += `• Kurs növü: ${courseTypeText}%0A`;
+                    message += `• Cədvəl: ${scheduleText}%0A`;
+                    
+                    if (teacherText) {
+                        message += `• Müəllim: ${teacherText}%0A`;
+                    }
+                    
+                    if (selectedTimes.length > 0) {
+                        message += `• Uyğun vaxtlar: ${selectedTimes.join(', ')}%0A`;
+                    }
+                    
+                    message += `%0A💰 *Ümumi Qiymət: ${totalPrice} ₼*`;
+                    
+                    if (extraCharge > 0) {
+                        message += `%0A(19:00 saatı üçün əlavə haqqı daxildir)`;
+                    }
+
+                    // Open WhatsApp
+                    const whatsappUrl = `https://wa.me/994552384002?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                    showNotification('Sifariş uğurla göndərildi!', 'success');
+                    
+                    closeOrderModal();
+                } else {
+                    throw new Error('API sorğusunda xəta baş verdi');
+                }
+
+            } catch (error) {
+                console.error('Xəta:', error);
+                showNotification('Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.', 'error');
+            } finally {
+                // Reset button
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = originalText;
             }
         }
 
@@ -549,75 +1065,82 @@
             calculatePrice();
         });
 
+        // Close modal when clicking outside
+        document.getElementById('orderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOrderModal();
+            }
+        });
+
         // Səhifə yüklənəndə ilkin hesablama
         document.addEventListener('DOMContentLoaded', function() {
             calculatePrice();
         });
         
-      const container = document.getElementById('floatingSymbolsContainer');
-    const calculator = document.querySelector('.calculator-container');
+        const container = document.getElementById('floatingSymbolsContainer');
+        const calculator = document.querySelector('.calculator-container');
 
-    const icons = [
-        'fa-language',
-        'fa-globe',
-        'fa-book',
-        'fa-headphones',
-        'fa-pencil-alt',
-        'fa-comment-dots',
-        'fa-spell-check',
-        'fa-chalkboard-teacher',
-        'fa-flag',
-        'fa-keyboard',
-        'fa-file-alt'
-    ];
+        const icons = [
+            'fa-language',
+            'fa-globe',
+            'fa-book',
+            'fa-headphones',
+            'fa-pencil-alt',
+            'fa-comment-dots',
+            'fa-spell-check',
+            'fa-chalkboard-teacher',
+            'fa-flag',
+            'fa-keyboard',
+            'fa-file-alt'
+        ];
 
-    const numberOfIcons = 40;
+        const numberOfIcons = 40;
 
-    function isOutsideCalculator(left, top, iconSize) {
-        const calcRect = calculator.getBoundingClientRect();
-        const buffer = 30; // İkon kalkulyatora çox yaxın olmasın deyə
+        function isOutsideCalculator(left, top, iconSize) {
+            const calcRect = calculator.getBoundingClientRect();
+            const buffer = 30; // İkon kalkulyatora çox yaxın olmasın deyə
 
-        return (
-            left + iconSize < calcRect.left - buffer ||         // soldan kənarda
-            left > calcRect.right + buffer ||                   // sağdan kənarda
-            top + iconSize < calcRect.top - buffer ||           // yuxarıdan
-            top > calcRect.bottom + buffer                      // aşağıdan
-        );
-    }
-
-    function placeIcons() {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-
-        for (let i = 0; i < numberOfIcons; i++) {
-            let icon = document.createElement('i');
-            icon.className = `fas floating-icon ${icons[Math.floor(Math.random() * icons.length)]}`;
-            
-            let iconSize = Math.random() * 30 + 20;
-            let left, top;
-
-            // Kalkulyatorun üstünə düşməməsi üçün uyğun yer tapana qədər təkrar
-            let maxTries = 100;
-            let tries = 0;
-
-            do {
-                left = Math.random() * vw;
-                top = Math.random() * vh;
-                tries++;
-            } while (!isOutsideCalculator(left, top, iconSize) && tries < maxTries);
-
-            icon.style.left = left + 'px';
-            icon.style.top = top + 'px';
-            icon.style.fontSize = iconSize + 'px';
-            icon.style.opacity = Math.random() * 0.4 + 0.1;
-
-            container.appendChild(icon);
+            return (
+                left + iconSize < calcRect.left - buffer ||         // soldan kənarda
+                left > calcRect.right + buffer ||                   // sağdan kənarda
+                top + iconSize < calcRect.top - buffer ||           // yuxarıdan
+                top > calcRect.bottom + buffer                      // aşağıdan
+            );
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        placeIcons();
-    });
+        function placeIcons() {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+
+            for (let i = 0; i < numberOfIcons; i++) {
+                let icon = document.createElement('i');
+                icon.className = `fas floating-icon ${icons[Math.floor(Math.random() * icons.length)]}`;
+                
+                let iconSize = Math.random() * 30 + 20;
+                let left, top;
+
+                // Kalkulyatorun üstünə düşməməsi üçün uyğun yer tapana qədər təkrar
+                let maxTries = 100;
+                let tries = 0;
+
+                do {
+                    left = Math.random() * vw;
+                    top = Math.random() * vh;
+                    tries++;
+                } while (!isOutsideCalculator(left, top, iconSize) && tries < maxTries);
+
+                icon.style.left = left + 'px';
+                icon.style.top = top + 'px';
+                icon.style.fontSize = iconSize + 'px';
+                icon.style.opacity = Math.random() * 0.4 + 0.1;
+
+                container.appendChild(icon);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            placeIcons();
+        });
     </script>
 </body>
 </html>
