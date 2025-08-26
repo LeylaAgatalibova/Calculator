@@ -193,7 +193,175 @@
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border: 2px solid #da0303 !important;
         }
+.teacher-info-container:not(:has(.teacher-info-panel.expanded)) {
+    margin-bottom: 0;
+}
+        /* Teacher Info Styles */
+        .teacher-info-container {
+            margin-top: 10px;
+            margin-bottom: 15px;
+    transition: margin-bottom 0.3s ease; /* Add transition for smooth effect */
+        }
 
+        .teacher-info-btn {
+            background: #da1503;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .teacher-info-btn:hover {
+            background: #b91202;
+            transform: translateY(-2px);
+        }
+
+        .teacher-info-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .teacher-info-btn.expanded i {
+            transform: rotate(180deg);
+        }
+
+        .teacher-info-panel {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0;
+            margin-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+              overflow-y: auto; /* This enables vertical scrolling */
+    max-height: 300px; /* This sets the maximum height before scrolling */
+        }
+
+        .teacher-info-panel.expanded {
+            max-height: 300px;
+            padding: 20px;
+            opacity: 1;
+            
+        }
+
+        .teacher-info-content h4 {
+            color: #da1503;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .teacher-info-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .teacher-info-content li {
+            padding: 5px 0;
+            color: #555;
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .teacher-info-content li:before {
+            content: "•";
+            color: #da1503;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+/* Teacher Info Styles */
+.teacher-info-container {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    transition: margin-bottom 0.3s ease;
+}
+
+.teacher-info-container:not(:has(.teacher-info-panel.expanded)) {
+    margin-bottom: 0;
+}
+
+.teacher-info-btn {
+    background: #da1503;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.teacher-info-btn:hover {
+    background: #b91202;
+    transform: translateY(-2px);
+}
+
+.teacher-info-btn i {
+    transition: transform 0.3s ease;
+}
+
+.teacher-info-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+.teacher-info-panel {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 0;
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    opacity: 0;
+    overflow-y: auto;
+}
+
+.teacher-info-panel.expanded {
+    max-height: 300px;
+    padding: 20px;
+    opacity: 1;
+}
+
+.teacher-info-content h4 {
+    color: #da1503;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.teacher-info-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.teacher-info-content li {
+    padding: 5px 0;
+    color: #555;
+    font-size: 0.9rem;
+    position: relative;
+    padding-left: 20px;
+}
+
+.teacher-info-content li:before {
+    content: "•";
+    color: #da1503;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
         /* Order Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -419,14 +587,26 @@
                     <option value="ielts">IELTS</option>
                     <option value="preielts">Pre-IELTS</option>
                     <option value="duolingo">DUOLINGO</option>
+                    <option value="abituriyent">Abituriyent İngilis dili</option>
                 </select>
             </div>
 
             <div class="form-group hidden" id="teacherGroup">
                 <label for="teacher">Müəllim:</label>
-                <select id="teacher" onchange="calculatePrice()">
+                <select id="teacher" onchange="showTeacherInfo(); calculatePrice()">
                     <option value="">Müəllim seçin</option>
                 </select>
+                
+                <div class="teacher-info-container" id="teacherInfoContainer" style="display: none;">
+                    <button type="button" class="teacher-info-btn" id="teacherInfoBtn" onclick="toggleTeacherInfo()">
+                        <i class="fas fa-info-circle"></i>
+                        Müəllim haqqında məlumat
+                    </button>
+                    <div class="teacher-info-panel" id="teacherInfoPanel">
+                        <div class="teacher-info-content" id="teacherInfoContent">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -546,6 +726,26 @@
                     "2x1": 190,   // 2 dəfə 1 saat
                     "2x1.5": 240, // 2 dəfə 1.5 saat
                     "3x1": 240    // 3 dəfə 1 saat
+                }
+            },
+            abituriyent: {
+                group: {
+                    "2x1.5": 95 // 2 dəfə 1.5 saat
+                },
+                closed2: {
+                    "2x1": 150,   // 2 dəfə 1 saat
+                    "2x1.5": 180, // 2 dəfə 1.5 saat
+                    "3x1": 180    // 3 dəfə 1 saat
+                },
+                closed3: {
+                    "2x1": 100,   // 2 dəfə 1 saat
+                    "2x1.5": 110, // 2 dəfə 1.5 saat
+                    "3x1": 110    // 3 dəfə 1 saat
+                },
+                individual: {
+                    "2x1": 180,   // 2 dəfə 1 saat
+                    "2x1.5": 230, // 2 dəfə 1.5 saat
+                    "3x1": 230    // 3 dəfə 1 saat
                 }
             },
             russian: {
@@ -674,13 +874,169 @@
 
         // Müəllimlər cədvəli
         const teacherTable = {
-            english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.İ', 'Vaqif.S', 'Ləman.M','Hacıyeva.N', 'Xəyalə.Ə'],
+            english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.A', 'Vaqif.S', 'Ləman.M', 'Xəyalə.Ə'],
+            abituriyent: [ 'Cəmilə.A', 'Xəyalə.Ə'],
             russian: ['İradə.B', 'Minarə.B', 'Gülnar.N'],
             france: ['Brilyant.Z'],
             german: ['Natiq.K'],
             ielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
             preielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
-            duolingo: ['Ləman.M', 'Mirəziz.S', 'Vaqif.S',]
+            duolingo: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',]
+        };
+
+        // Müəllimlər haqqında məlumat
+        const teacherInfo = {
+            'leman.m': {
+                name: '',
+                info: [
+                    'Müəllimlik sahəsində 6+ il təcrübə',
+                     'IELTS 7.5 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
+                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                   
+                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                    
+                    
+                ]
+            },
+            'mirəziz.s': {
+                name: '',
+                info: [
+                     'Müəllimlik sahəsində 8+ il təcrübə',
+                       'TOEFL 83 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                    
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                  
+                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                ]
+            },
+            'cəmilə.a': {
+                name: '',
+                info: [
+                    'Müəllimlik sahəsində 8+ il təcrübə',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                    
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',                   
+                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                ]
+            },
+            'vaqif.s': {
+                name: '',
+                info: [
+                   'Müəllimlik sahəsində 11+ il təcrübə',
+                      'IELTS 8.0 nəticəsi',
+                    'Duolingo 150 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
+                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                 
+                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                ]
+            },
+            
+            'xəyalə.ə': {
+                name: '',
+                info: [
+                     'Müəllimlik sahəsində 15+ il təcrübə',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    
+                    
+                ]
+            },
+             'ləman.m': {
+                name: '',
+                info: [
+                    'Müəllimlik sahəsində 1+ il təcrübə',
+                    'TOEFL 96 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
+                    
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    
+                    
+                    
+                    
+                ]
+            },
+            'iradə.b': {
+                name: '',
+                info: [
+                    '13+ il təcrübə',
+                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                ]
+            },
+            'minarə.b': {
+                name: '',
+                info: [
+                     '13+ il təcrübə',
+                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                ]
+            },
+            'gülnar.n': {
+                name: '',
+                info: [
+                     '11+ il təcrübə',
+                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                ]
+            },
+            'brilyant.z': {
+                name: '',
+                info: [
+                    '8+ il təcrübə',
+                    'Delf Dalf sertifikat',
+                    
+                    'Fransız dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübə',
+                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                ]
+            },
+            'natiq.k': {
+                name: '',
+                info: [
+                   '3+ il təcrübə',
+                    'Goethe C1 nəticəsi',
+                    'Alman dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübə',
+                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                   
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                ]
+            }
         };
 
         // Notification functions
@@ -702,6 +1058,7 @@
         function getLanguageText(language) {
             const languageMap = {
                 'english': 'İngilis dili',
+                'abituriyent': 'abituriyent',
                 'russian': 'Rus dili',
                 'german': 'Alman dili',
                 'france': 'Fransız dili',
@@ -731,6 +1088,54 @@
                 '3x1': 'Həftədə 3 dəfə, 1 saat'
             };
             return scheduleMap[schedule] || schedule;
+        }
+
+        // Teacher Info Functions
+        function showTeacherInfo() {
+            const teacherSelect = document.getElementById('teacher');
+            const teacherInfoContainer = document.getElementById('teacherInfoContainer');
+            const teacherInfoPanel = document.getElementById('teacherInfoPanel');
+            const teacherInfoBtn = document.getElementById('teacherInfoBtn');
+            
+            if (teacherSelect.value) {
+                teacherInfoContainer.style.display = 'block';
+                // Reset panel state when teacher changes
+                teacherInfoPanel.classList.remove('expanded');
+                teacherInfoBtn.classList.remove('expanded');
+            } else {
+                teacherInfoContainer.style.display = 'none';
+            }
+        }
+
+        function toggleTeacherInfo() {
+            const teacherSelect = document.getElementById('teacher');
+            const teacherInfoPanel = document.getElementById('teacherInfoPanel');
+            const teacherInfoBtn = document.getElementById('teacherInfoBtn');
+            const teacherInfoContent = document.getElementById('teacherInfoContent');
+            
+            const selectedTeacher = teacherSelect.value;
+            
+            if (!selectedTeacher) return;
+            
+            if (teacherInfoPanel.classList.contains('expanded')) {
+                // Close panel
+                teacherInfoPanel.classList.remove('expanded');
+                teacherInfoBtn.classList.remove('expanded');
+            } else {
+                // Open panel and populate content
+                const teacher = teacherInfo[selectedTeacher];
+                if (teacher) {
+                    let infoHTML = `<h4>${teacher.name}</h4><ul>`;
+                    teacher.info.forEach(info => {
+                        infoHTML += `<li>${info}</li>`;
+                    });
+                    infoHTML += '</ul>';
+                    teacherInfoContent.innerHTML = infoHTML;
+                }
+                
+                teacherInfoPanel.classList.add('expanded');
+                teacherInfoBtn.classList.add('expanded');
+            }
         }
 
         // Vaxt seçimi funksiyası
@@ -767,9 +1172,11 @@
             const language = document.getElementById('language').value;
             const teacherSelect = document.getElementById('teacher');
             const teacherGroup = document.getElementById('teacherGroup');
+            const teacherInfoContainer = document.getElementById('teacherInfoContainer');
             
             // Müəllim seçimini təmizləmək
             teacherSelect.innerHTML = '<option value="">Müəllim seçin</option>';
+            teacherInfoContainer.style.display = 'none';
             
             if (language && teacherTable[language]) {
                 // Müəllim qrupunu göstərmək
@@ -844,7 +1251,7 @@
             
             if (basePrice) {
                 // 19:00 saatı üçün fərdi dərslərdə əlavə haqqı yoxlamaq
-                if (courseType === 'individual' && selectedTimes.includes('19:00')) {
+                if (courseType === 'individual'||'closed2' && selectedTimes.includes('19:00')) {
                     extraCharge = 30;
                     breakdown = `Əsas qiymət: ${basePrice}₼ + 19:00 saatı üçün əlavə: ${extraCharge}₼`;
                 }
