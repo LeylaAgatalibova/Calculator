@@ -65,7 +65,7 @@
                 <label for="format">Tədris formatı:</label>
                 <select id="format" onchange="calculatePrice()">
                     <option value="">Formatı seçin</option>
-                    <option value="inperson">Offline</option>
+                    <option value="inperson">Kursda</option>
                     <option value="online">Online</option>
                 </select>
             </div>
@@ -330,9 +330,9 @@
                     },
                   
                     individual: {
-                        "2x1": 0,   
-                        "2x1.5": 0, 
-                        "3x1": 0    
+                        "2x1": 215,   
+                        "2x1.5": 275, 
+                        "3x1": 275    
                     },
                       closed2: {
                         "2x1": 185,   
@@ -350,14 +350,14 @@
                         "2x1.5": 215
                     },
                     closed2: {
-                        "2x1": 0,   
-                        "2x1.5": 0, 
-                        "3x1": 0    
+                        "2x1": 225,   
+                        "2x1.5": 265, 
+                        "3x1": 265    
                     },
                     closed3: {
-                        "2x1": 0,   
-                        "2x1.5": 0, 
-                        "3x1": 0    
+                        "2x1": 225,   
+                        "2x1.5": 245, 
+                        "3x1": 245    
                     },
                     individual: {
                         "2x1": 305,   
@@ -791,7 +791,7 @@
         function getFormatText(format) {
             const formatMap = {
                 'online': 'Online',
-                'inperson': 'Offline'
+                'inperson': 'Kursda'
             };
             return formatMap[format] || format;
         }
@@ -1212,7 +1212,7 @@
 
                 if (response.ok) {
                     // Create WhatsApp message
-                    let message = `🎓 *LIB Dil Kursları - Yeni Sifariş*%0A%0A`;
+                    let message = ` *LIB Dil Kursları - Yeni Sifariş*%0A%0A`;
                     message += `👤 *Müştəri:* ${name}%0A`;
                     message += `📞 *Telefon:* ${phone}%0A%0A`;
                     message += `📚 *Kurs Məlumatları:*%0A`;
