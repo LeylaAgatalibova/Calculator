@@ -1,585 +1,27 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIB Qiymət Kalkulyatoru</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        #floatingSymbolsContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.floating-icon {
-    position: absolute;
-    opacity: 0.1;
-    font-size: 20px;
-    color: #000;
-}
-
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fa0505 0%, #ffffff 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .calculator-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 20px 40px;
-            width: 100%;
-            max-width: 500px;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .logo {
-            display: block;
-            margin: 0 auto 10px auto;
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            font-weight: 600;
-        
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group.hidden {
-            display: none;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-            font-size: 1.1rem;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #da1503;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(218, 143, 3, 0.1);
-        }
-
-        .time-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .time-option {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            background: #f9f9f9;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .time-option:hover {
-            background: #f0f0f0;
-            border-color: #da1503;
-        }
-
-        .time-option.selected {
-            background: #da1503;
-            color: white;
-            border-color: #da1503;
-        }
-
-        .time-option input[type="checkbox"] {
-            margin-right: 8px;
-            width: auto;
-            padding: 0;
-        }
-
-        .price-result {
-            background: linear-gradient(135deg, #f20d05, #e3a3a3);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(231, 229, 229, 0.3);
-            transform: scale(0.98);
-            transition: transform 0.3s ease;
-        }
-
-        .price-result.active {
-            transform: scale(1);
-        }
-
-        .price-label {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
-        .price-amount {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .price-details {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .price-breakdown {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin-top: 8px;
-            font-style: italic;
-        }
-
-        .calculator-form {
-            animation: slideIn 0.8s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .teacher-highlight {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid #da0303 !important;
-        }
-.teacher-info-container:not(:has(.teacher-info-panel.expanded)) {
-    margin-bottom: 0;
-}
-        /* Teacher Info Styles */
-        .teacher-info-container {
-            margin-top: 10px;
-            margin-bottom: 15px;
-    transition: margin-bottom 0.3s ease; /* Add transition for smooth effect */
-        }
-
-        .teacher-info-btn {
-            background: #da1503;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .teacher-info-btn:hover {
-            background: #b91202;
-            transform: translateY(-2px);
-        }
-
-        .teacher-info-btn i {
-            transition: transform 0.3s ease;
-        }
-
-        .teacher-info-btn.expanded i {
-            transform: rotate(180deg);
-        }
-
-        .teacher-info-panel {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 0;
-            margin-top: 10px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-              overflow-y: auto; /* This enables vertical scrolling */
-    max-height: 300px; /* This sets the maximum height before scrolling */
-        }
-
-        .teacher-info-panel.expanded {
-            max-height: 300px;
-            padding: 20px;
-            opacity: 1;
-            
-        }
-
-        .teacher-info-content h4 {
-            color: #da1503;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .teacher-info-content ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .teacher-info-content li {
-            padding: 5px 0;
-            color: #555;
-            font-size: 0.9rem;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .teacher-info-content li:before {
-            content: "•";
-            color: #da1503;
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
-/* Teacher Info Styles */
-.teacher-info-container {
-    margin-top: 10px;
-    margin-bottom: 15px;
-    transition: margin-bottom 0.3s ease;
-}
-
-.teacher-info-container:not(:has(.teacher-info-panel.expanded)) {
-    margin-bottom: 0;
-}
-
-.teacher-info-btn {
-    background: #da1503;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.teacher-info-btn:hover {
-    background: #b91202;
-    transform: translateY(-2px);
-}
-
-.teacher-info-btn i {
-    transition: transform 0.3s ease;
-}
-
-.teacher-info-btn.expanded i {
-    transform: rotate(180deg);
-}
-
-.teacher-info-panel {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 10px;
-    padding: 0;
-    margin-top: 10px;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    opacity: 0;
-    overflow-y: auto;
-}
-
-.teacher-info-panel.expanded {
-    max-height: 300px;
-    padding: 20px;
-    opacity: 1;
-}
-
-.teacher-info-content h4 {
-    color: #da1503;
-    margin-bottom: 12px;
-    font-size: 1.1rem;
-}
-
-.teacher-info-content ul {
-    list-style: none;
-    padding: 0;
-}
-
-.teacher-info-content li {
-    padding: 5px 0;
-    color: #555;
-    font-size: 0.9rem;
-    position: relative;
-    padding-left: 20px;
-}
-
-.teacher-info-content li:before {
-    content: "•";
-    color: #da1503;
-    font-weight: bold;
-    position: absolute;
-    left: 0;
-}
-        /* Order Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .order-modal {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            transform: scale(0.8);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .order-modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-header h2 {
-            color: #333;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .modal-header p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .order-form {
-            margin-bottom: 20px;
-        }
-
-        .order-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .order-form label {
-            font-size: 1rem;
-            margin-bottom: 6px;
-        }
-
-        .order-summary {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 25px;
-            font-size: 0.9rem;
-        }
-
-        .order-summary h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .order-summary-item {
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: space-between;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn.cancel {
-            background: #e9ecef;
-            color: #333;
-        }
-
-        .modal-btn.cancel:hover {
-            background: #dee2e6;
-        }
-
-        .modal-btn.confirm {
-            background: #25D366;
-            color: white;
-        }
-
-        .modal-btn.confirm:hover {
-            background: #22c55e;
-        }
-
-        .modal-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .success-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-        }
-
-        .success-message.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .error-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #dc3545;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-        }
-
-        .error-message.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        @media (max-width: 600px) {
-            .calculator-container {
-                padding: 15px 20px;
-            }
-            
-            .logo {
-                width: 120px;
-                height: 120px;
-                margin-bottom: 15px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            .price-amount {
-                font-size: 2rem;
-            }
-
-            .time-selection {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .order-modal {
-                padding: 20px;
-                margin: 20px;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-            }
-
-            @media (max-width: 858px) {
-                #floatingSymbolsContainer {
-                    display: none;
-                }
-            }
-        }
-        
-    </style>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
+
 <body>
+
     <div id="floatingSymbolsContainer"></div>
 
     <div class="calculator-container">
         <img src="logo.png" alt="LIB Logo" class="logo" onerror="this.style.display='none'">
-        <h1>LIB Qiymət Kalkulyatoru</h1>
-        
+        <h1 style="color: rgb(224,10,40);">Tələbə Müraciəti</h1>
         <form class="calculator-form">
             <div class="form-group">
-                <label for="language">Dil:</label>
+                <label for="language">Tədris olunacaq dil:</label>
                 <select id="language" onchange="updateTeachers(); calculatePrice()">
-                    <option value="">Dil seçin</option>
+                    <option value="">Dili seçin</option>
                     <option value="english">İngilis dili</option>
                     <option value="russian">Rus dili</option>
                     <option value="german">Alman dili</option>
@@ -594,9 +36,9 @@
             <div class="form-group hidden" id="teacherGroup">
                 <label for="teacher">Müəllim:</label>
                 <select id="teacher" onchange="showTeacherInfo(); calculatePrice()">
-                    <option value="">Müəllim seçin</option>
+                    <option value="">Müəllimi seçin</option>
                 </select>
-                
+
                 <div class="teacher-info-container" id="teacherInfoContainer" style="display: none;">
                     <button type="button" class="teacher-info-btn" id="teacherInfoBtn" onclick="toggleTeacherInfo()">
                         <i class="fas fa-info-circle"></i>
@@ -612,23 +54,31 @@
             <div class="form-group">
                 <label for="courseType">Kurs növü:</label>
                 <select id="courseType" onchange="calculatePrice()">
-                    <option value="">Kurs növü seçin</option>
+                    <option value="">Kurs növünü seçin</option>
                     <option value="group">Qrup</option>
+                    <option value="individual">Fərdi</option>
                     <option value="closed2">2 nəfərlik qapalı qrup</option>
                     <option value="closed3">3 nəfərlik qapalı qrup</option>
-                    <option value="individual">Fərdi</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="format">Tədris formatı:</label>
+                <select id="format" onchange="calculatePrice()">
+                    <option value="">Formatı seçin</option>
+                    <option value="inperson">Offline</option>
+                    <option value="online">Online</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="schedule">Cədvəl:</label>
                 <select id="schedule" onchange="calculatePrice()">
-                    <option value="">Cədvəl seçin</option>
+                    <option value="">Cədvəli seçin</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Sizə uyğun dərs vaxtını seçin (bir neçəsini seçə bilərsiniz):</label>
+                <label>Sizə uyğun dərs vaxtlarını seçin :</label>
                 <div class="time-selection">
                     <div class="time-option" onclick="toggleTimeSelection('09:00')">
                         <input type="checkbox" id="time_0900" value="09:00">
@@ -666,8 +116,8 @@
         </form>
         <div style="text-align: center; margin-top: 25px;">
             <button onclick="openOrderModal();"
-                    title="Dərslər və kampaniyalar haqqında ətraflı məlumat almaq üçün əlaqə saxlayın"
-                    style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease; border: none; cursor: pointer;">
+                title="Dərslər və kampaniyalar haqqında ətraflı məlumat almaq üçün əlaqə saxlayın"
+                style="display: inline-block; background-color: #25D366; color: white; padding: 30px 60px; border-radius: 10px; font-size: 1.1rem; font-weight: 500; text-decoration: none; transition: background-color 0.3s ease; border: none; cursor: pointer;">
                 📞 Sifariş edin
             </button>
         </div>
@@ -680,24 +130,24 @@
                 <h2>Sifariş Təsdiqi</h2>
                 <p>Sifarişinizi təsdiqləmək üçün məlumatlarınızı daxil edin</p>
             </div>
-            
+
             <div class="order-summary" id="orderSummary">
                 <h3>Sifariş xülasəsi:</h3>
                 <div id="summaryContent"></div>
             </div>
-            
+
             <form class="order-form" id="orderForm">
                 <div class="form-group">
                     <label for="customerName">Ad və Soyad *</label>
                     <input type="text" id="customerName" placeholder="Adınızı və soyadınızı daxil edin" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="customerPhone">Əlaqə nömrəsi *</label>
                     <input type="tel" id="customerPhone" placeholder="Telefon nömrənizi daxil edin" required>
                 </div>
             </form>
-            
+
             <div class="modal-buttons">
                 <button class="modal-btn cancel" onclick="closeOrderModal()">Ləğv et</button>
                 <button class="modal-btn confirm" onclick="confirmOrder()">Sifarişi təsdiq et</button>
@@ -706,7 +156,7 @@
     </div>
 
     <script>
-        // Qiymət cədvəli
+        // Standard qiymət cədvəli
         const priceTable = {
             english: {
                 group: {
@@ -788,8 +238,8 @@
                     "3x1": 255    // 3 dəfə 1 saat
                 }
             },
-             france: {
-               group: {
+            france: {
+                group: {
                     "2x1.5": 105 // 2 dəfə 1.5 saat
                 },
                 closed2: {
@@ -808,7 +258,7 @@
                     "3x1": 240    // 3 dəfə 1 saat
                 }
             },
-             ielts: {
+            ielts: {
                 group: {
                     "2x1.5": 190 // 2 dəfə 1.5 saat
                 },
@@ -828,7 +278,7 @@
                     "3x1": 350    // 3 dəfə 1 saat
                 }
             },
-             preielts: {
+            preielts: {
                 group: {
                     "2x1.5": 180 // 2 dəfə 1.5 saat
                 },
@@ -848,8 +298,7 @@
                     "3x1": 340    // 3 dəfə 1 saat
                 }
             },
-            
-             duolingo: {
+            duolingo: {
                 group: {
                     "2x1.5": 190 // 2 dəfə 1.5 saat
                 },
@@ -869,19 +318,271 @@
                     "3x1": 350    // 3 dəfə 1 saat
                 }
             },
-
         };
+
+        // HƏR PREMIUM MÜƏLLIM ÜÇÜN FƏRQLI QİYMƏT CƏDVƏLLƏRİ
+        const individualTeacherPrices = {
+            // VAQİF.S üçün qiymətlər
+            'vaqif.s': {
+                english: {
+                    group: {
+                        "2x1.5": 130 
+                    },
+                  
+                    individual: {
+                        "2x1": 0,   
+                        "2x1.5": 0, 
+                        "3x1": 0    
+                    },
+                      closed2: {
+                        "2x1": 185,   
+                        "2x1.5": 215, 
+                        "3x1": 215   
+                    },
+                    closed3: {
+                        "2x1": 130,   
+                        "2x1.5": 145, 
+                        "3x1": 145    
+                    },
+                },
+                ielts: {
+                    group: {
+                        "2x1.5": 215
+                    },
+                    closed2: {
+                        "2x1": 0,   
+                        "2x1.5": 0, 
+                        "3x1": 0    
+                    },
+                    closed3: {
+                        "2x1": 0,   
+                        "2x1.5": 0, 
+                        "3x1": 0    
+                    },
+                    individual: {
+                        "2x1": 305,   
+                        "2x1.5": 375,  
+                        "3x1": 375    
+                    }
+                },
+                preielts: {
+                    group: {
+                        "2x1.5": 205
+                    },
+                    closed2: {
+                        "2x1": 215,  
+                        "2x1.5": 255, 
+                        "3x1": 255    
+                    },
+                    closed3: {
+                        "2x1": 215,   
+                        "2x1.5": 235, 
+                        "3x1": 235    
+                    },
+                    individual: {
+                        "2x1": 295,   
+                        "2x1.5": 365,  
+                        "3x1": 365  
+                    }
+                },
+                duolingo: {
+                    group: {
+                        "2x1.5": 215
+                    },
+                    closed2: {
+                        "2x1": 225,   
+                        "2x1.5": 265, 
+                        "3x1": 265    
+                    },
+                    closed3: {
+                        "2x1": 225,   
+                        "2x1.5": 245, 
+                        "3x1": 245    
+                    },
+                    individual: {
+                        "2x1": 305,   
+                        "2x1.5": 375,  
+                        "3x1": 375    
+                    }
+                }
+            },
+
+            // MİRƏZİZ.S üçün qiymətlər
+            'mirəziz.s': {
+                english: {
+                    group: {
+                        "2x1.5": 105
+                    },
+                    closed2: {
+                        "2x1":165,   
+                        "2x1.5": 195, 
+                        "3x1": 195    
+                    },
+                    closed3: {
+                        "2x1": 110,   
+                        "2x1.5": 125, 
+                        "3x1": 125    
+                    },
+                    individual: {
+                        "2x1": 195,   
+                        "2x1.5": 245, 
+                        "3x1": 245    
+                    }
+                },
+                ielts: {
+                    group: {
+                        "2x1.5": 195
+                    },
+                    closed2: {
+                        "2x1": 205,  
+                        "2x1.5": 245, 
+                        "3x1": 245    
+                    },
+                    closed3: {
+                        "2x1": 205,   
+                        "2x1.5": 225, 
+                        "3x1": 225    
+                    },
+                    individual: {
+                        "2x1": 285,   
+                        "2x1.5": 355,  
+                        "3x1": 355    
+                    }
+                },
+                preielts: {
+                    group: {
+                        "2x1.5": 185 
+                    },
+                    closed2: {
+                        "2x1": 195,  
+                        "2x1.5": 235, 
+                        "3x1": 235   
+                    },
+                    closed3: {
+                        "2x1": 195,   
+                        "2x1.5": 215, 
+                        "3x1": 215    
+                    },
+                    individual: {
+                        "2x1": 275,   
+                        "2x1.5": 345,  
+                        "3x1": 345    
+                    }
+                },
+             
+            },
+
+            // LEMAN.M üçün qiymətlər  
+            'leman.m': {
+                english: {
+                    group: {
+                        "2x1.5": 115 
+                    },
+                    closed2: {
+                        "2x1": 175,   
+                        "2x1.5": 205, 
+                        "3x1": 205    
+                    },
+                    closed3: {
+                        "2x1": 115,  
+                        "2x1.5": 135, 
+                        "3x1": 135    
+                    },
+                    individual: {
+                        "2x1": 205,   
+                        "2x1.5": 255, 
+                        "3x1": 255    
+                    }
+                },
+                ielts: {
+                    group: {
+                        "2x1.5": 205 
+                    },
+                    closed2: {
+                        "2x1": 215,   
+                        "2x1.5": 255, 
+                        "3x1": 255    
+                    },
+                    closed3: {
+                        "2x1": 215,   
+                        "2x1.5": 235, 
+                        "3x1": 235    
+                    },
+                    individual: {
+                        "2x1": 295,   
+                        "2x1.5": 365,  
+                        "3x1": 365    
+                    }
+                },
+                preielts: {
+                    group: {
+                        "2x1.5": 195 
+                    },
+                    closed2: {
+                        "2x1": 205,  
+                        "2x1.5": 245, 
+                        "3x1": 245    
+                    },
+                    closed3: {
+                        "2x1": 205,   
+                        "2x1.5": 225,   
+                        "3x1": 225    
+                    },
+                    individual: {
+                        "2x1": 285,   
+                        "2x1.5": 355,  
+                        "3x1": 355    
+                    }
+                },
+                duolingo: {
+                    group: {
+                        "2x1.5": 205
+                    },
+                    closed2: {
+                        "2x1": 215,  
+                        "2x1.5": 255, 
+                        "3x1": 255   
+                    },
+                    closed3: {
+                        "2x1": 215,   // Leman üçün DUOLINGO 3 nəfərlik qapalı qrup - buraya qiyməti əlavə edin
+                        "2x1.5": 235, 
+                        "3x1": 235    
+                    },
+                    individual: {
+                        "2x1": 295,   // Leman üçün DUOLINGO fərdi dərs - buraya qiyməti əlavə edin
+                        "2x1.5": 365,  
+                        "3x1": 365    
+                    }
+                }
+            }
+        };
+
+        // Premium müəllimlər siyahısı
+        const premiumTeachers = ['vaqif.s', 'mirəziz.s', 'leman.m'];
+
+        // Premium müəllim olub-olmadığını yoxlamaq funksiyası
+        function isPremiumTeacher(teacherValue) {
+            return premiumTeachers.includes(teacherValue);
+        }
+
+        // Doğru qiymət cədvəlini əldə etmək funksiyası
+        function getPriceTable(teacher) {
+            if (teacher && isPremiumTeacher(teacher)) {
+                return individualTeacherPrices[teacher] || priceTable;
+            }
+            return priceTable;
+        }
 
         // Müəllimlər cədvəli
         const teacherTable = {
             english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.A', 'Vaqif.S', 'Ləman.M', 'Xəyalə.Ə'],
-            abituriyent: [ 'Cəmilə.A', 'Xəyalə.Ə'],
+            abituriyent: ['Cəmilə.A', 'Xəyalə.Ə'],
             russian: ['İradə.B', 'Minarə.B', 'Gülnar.N'],
             france: ['Brilyant.Z'],
             german: ['Natiq.K'],
             ielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
             preielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
-            duolingo: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',]
+            duolingo: ['Leman.M',  'Vaqif.S',]
         };
 
         // Müəllimlər haqqında məlumat
@@ -889,152 +590,148 @@
             'leman.m': {
                 name: '',
                 info: [
-                    'Müəllimlik sahəsində 6+ il təcrübə',
-                     'IELTS 7.5 nəticəsi',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
+                    'Müəllimlik sahəsində 6+ il peşəkar iş təcrübəsi',
+                    'IELTS 8.0 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
-                   
-                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
-                    
-                    
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
                 ]
             },
             'mirəziz.s': {
                 name: '',
                 info: [
-                     'Müəllimlik sahəsində 8+ il təcrübə',
-                       'TOEFL 83 nəticəsi',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                    
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
-                  
-                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                    'Müəllimlik sahəsində 8+ il peşəkar iş təcrübəsi',
+                    'TOEFL 105 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
                 ]
             },
             'cəmilə.a': {
                 name: '',
                 info: [
-                    'Müəllimlik sahəsində 8+ il təcrübə',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                    
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',                   
-                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                    'Müəllimlik sahəsində 8+ il peşəkar iş təcrübəsi',
+
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
+                    'Abituriyent hazırlığı üzrə pedoqoji təcrübəsi'
                 ]
             },
             'vaqif.s': {
                 name: '',
                 info: [
-                   'Müəllimlik sahəsində 11+ il təcrübə',
-                      'IELTS 8.0 nəticəsi',
+                    'Müəllimlik sahəsində 11+ il peşəkar iş təcrübəsi',
+                    'IELTS 8.0 nəticəsi',
                     'Duolingo 150 nəticəsi',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
+                    'TESOL sertifikatı',
                     'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
-                 
-                    'Akademik və gündəlik ingilis dili üzrə güclü bilik bazası',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
+
                 ]
             },
-            
+
             'xəyalə.ə': {
                 name: '',
                 info: [
-                     'Müəllimlik sahəsində 15+ il təcrübə',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',                
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
-                    
-                    
+                    'Müəllimlik sahəsində 15+ il peşəkar iş təcrübəsi',
+
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
+
+
                 ]
             },
-             'ləman.m': {
+            'ləman.m': {
                 name: '',
                 info: [
-                    'Müəllimlik sahəsində 1+ il təcrübə',
+                    'Müəllimlik sahəsində 2+ il peşəkar iş təcrübəsi',
                     'TOEFL 96 nəticəsi',
-                    'Müxtəlif yaş qrupları ilə işləmək üzrə peşəkar təcrübə',
-                    
-                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
-                    
-                    
-                    
-                    
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
                 ]
             },
             'iradə.b': {
                 name: '',
                 info: [
-                    '13+ il təcrübə',
+                    '13+ il pedaqoji təcrübəsi',
                     'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə təcrübəsi',
                 ]
             },
             'minarə.b': {
                 name: '',
                 info: [
-                     '13+ il təcrübə',
+                    '13+ il pedaqoji təcrübəsi',
                     'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə təcrübəsi',
                 ]
             },
             'gülnar.n': {
                 name: '',
                 info: [
-                     '11+ il təcrübə',
+                    '11+ il pedaqoji təcrübəsi',
                     'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə təcrübəsi',
                 ]
             },
             'brilyant.z': {
                 name: '',
                 info: [
-                    '8+ il təcrübə',
-                    'Delf Dalf sertifikat',
-                    
+                    '8+ il pedaqoji təcrübəsi',
+                    'DELF/DALF sertifikatları',
+
                     'Fransız dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübə',
-                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrətmə təcrübəsi',
                 ]
             },
             'natiq.k': {
                 name: '',
                 info: [
-                   '3+ il təcrübə',
+                    '3+ il pedoqoji təcrübəsi',
                     'Goethe C1 nəticəsi',
                     'Alman dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
-                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübə',
-                  'Danışıq, qrammatika və yazı bacarıqlarının inkişafına fokus',
+                    'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübəsi',
+                    'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
-                   
-                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratmaq',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə',
+                    'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrətmə təcrübəsi',
                 ]
             }
         };
@@ -1090,13 +787,22 @@
             return scheduleMap[schedule] || schedule;
         }
 
+        // Format mapping function
+        function getFormatText(format) {
+            const formatMap = {
+                'online': 'Online',
+                'inperson': 'Offline'
+            };
+            return formatMap[format] || format;
+        }
+
         // Teacher Info Functions
         function showTeacherInfo() {
             const teacherSelect = document.getElementById('teacher');
             const teacherInfoContainer = document.getElementById('teacherInfoContainer');
             const teacherInfoPanel = document.getElementById('teacherInfoPanel');
             const teacherInfoBtn = document.getElementById('teacherInfoBtn');
-            
+
             if (teacherSelect.value) {
                 teacherInfoContainer.style.display = 'block';
                 // Reset panel state when teacher changes
@@ -1112,11 +818,11 @@
             const teacherInfoPanel = document.getElementById('teacherInfoPanel');
             const teacherInfoBtn = document.getElementById('teacherInfoBtn');
             const teacherInfoContent = document.getElementById('teacherInfoContent');
-            
+
             const selectedTeacher = teacherSelect.value;
-            
+
             if (!selectedTeacher) return;
-            
+
             if (teacherInfoPanel.classList.contains('expanded')) {
                 // Close panel
                 teacherInfoPanel.classList.remove('expanded');
@@ -1132,7 +838,7 @@
                     infoHTML += '</ul>';
                     teacherInfoContent.innerHTML = infoHTML;
                 }
-                
+
                 teacherInfoPanel.classList.add('expanded');
                 teacherInfoBtn.classList.add('expanded');
             }
@@ -1143,15 +849,15 @@
             const timeId = time.replace(':', '');
             const checkbox = document.getElementById(`time_${timeId}`);
             const timeOption = checkbox.parentElement;
-            
+
             checkbox.checked = !checkbox.checked;
-            
+
             if (checkbox.checked) {
                 timeOption.classList.add('selected');
             } else {
                 timeOption.classList.remove('selected');
             }
-            
+
             calculatePrice();
         }
 
@@ -1173,15 +879,15 @@
             const teacherSelect = document.getElementById('teacher');
             const teacherGroup = document.getElementById('teacherGroup');
             const teacherInfoContainer = document.getElementById('teacherInfoContainer');
-            
+
             // Müəllim seçimini təmizləmək
-            teacherSelect.innerHTML = '<option value="">Müəllim seçin</option>';
+            teacherSelect.innerHTML = '<option value="">Müəllimi seçin</option>';
             teacherInfoContainer.style.display = 'none';
-            
+
             if (language && teacherTable[language]) {
                 // Müəllim qrupunu göstərmək
                 teacherGroup.classList.remove('hidden');
-                
+
                 // Müəllimləri əlavə etmək
                 teacherTable[language].forEach(teacher => {
                     const option = document.createElement('option');
@@ -1189,7 +895,7 @@
                     option.textContent = teacher;
                     teacherSelect.appendChild(option);
                 });
-                
+
                 // Müəllim seçimini vurğulamaq
                 teacherSelect.classList.add('teacher-highlight');
             } else {
@@ -1203,19 +909,25 @@
         function updateScheduleOptions() {
             const language = document.getElementById('language').value;
             const courseType = document.getElementById('courseType').value;
+            const teacher = document.getElementById('teacher').value;
             const scheduleSelect = document.getElementById('schedule');
-            
+
             // Cədvəl seçimini təmizləmək
-            scheduleSelect.innerHTML = '<option value="">Cədvəl seçin</option>';
-            
-            if (language && courseType && priceTable[language] && priceTable[language][courseType]) {
-                const schedules = priceTable[language][courseType];
+            scheduleSelect.innerHTML = '<option value="">Cədvəli seçin</option>';
+
+            if (language && courseType) {
+                // Doğru qiymət cədvəlini seç (premium və ya standart)
+                const currentPriceTable = getPriceTable(teacher);
                 
-                for (const schedule in schedules) {
-                    const option = document.createElement('option');
-                    option.value = schedule;
-                    option.textContent = getScheduleText(schedule);
-                    scheduleSelect.appendChild(option);
+                if (currentPriceTable[language] && currentPriceTable[language][courseType]) {
+                    const schedules = currentPriceTable[language][courseType];
+
+                    for (const schedule in schedules) {
+                        const option = document.createElement('option');
+                        option.value = schedule;
+                        option.textContent = getScheduleText(schedule);
+                        scheduleSelect.appendChild(option);
+                    }
                 }
             }
         }
@@ -1225,8 +937,9 @@
             const teacher = document.getElementById('teacher').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
+            const format = document.getElementById('format').value;
             const selectedTimes = getSelectedTimes();
-            
+
             const priceResult = document.getElementById('priceResult');
             const priceAmount = document.getElementById('priceAmount');
             const priceDetails = document.getElementById('priceDetails');
@@ -1237,7 +950,7 @@
                 updateScheduleOptions();
             }
 
-            if (!language || !courseType || !schedule) {
+            if (!language || !courseType || !schedule || !format) {
                 priceAmount.textContent = '0 ₼';
                 priceDetails.textContent = 'Seçiminizi edin';
                 priceBreakdown.textContent = '';
@@ -1245,30 +958,69 @@
                 return;
             }
 
-            let basePrice = priceTable[language][courseType][schedule];
-            let extraCharge = 0;
-            let breakdown = '';
+            // Doğru qiymət cədvəlini seç (premium və ya standart)
+            const currentPriceTable = getPriceTable(teacher);
+            let basePrice = 0;
             
+            if (currentPriceTable[language] && currentPriceTable[language][courseType] && currentPriceTable[language][courseType][schedule]) {
+                basePrice = currentPriceTable[language][courseType][schedule];
+            }
+
+            let extraCharge = 0;
+            let onlineDiscount = 0;
+            let breakdown = '';
+            let premiumNote = '';
+
             if (basePrice) {
-                // 19:00 saatı üçün fərdi dərslərdə əlavə haqqı yoxlamaq
-                if (courseType === 'individual'||'closed2' && selectedTimes.includes('19:00')) {
+                // // Premium müəllim qeydini əlavə et
+                // if (teacher && isPremiumTeacher(teacher)) {
+                //     premiumNote = ' (Premium müəllim)';
+                // }
+
+                // 19:00 saatı üçün əlavə haqqı yoxlamaq
+                if (courseType === 'individual' && selectedTimes.includes('19:00')) {
                     extraCharge = 30;
-                    breakdown = `Əsas qiymət: ${basePrice}₼ + 19:00 saatı üçün əlavə: ${extraCharge}₼`;
+                }
+                if (courseType === 'closed2' && selectedTimes.includes('19:00')) {
+                    extraCharge = 20;
+                }
+                if (courseType === 'closed3' && selectedTimes.includes('19:00')) {
+                    extraCharge = 20;
+                }
+                if (courseType === 'group' && selectedTimes.includes('19:00')) {
+                    extraCharge = 10;
                 }
 
-                const totalPrice = basePrice + extraCharge;
+                // Online formatı üçün 5 AZN endirim
+                if (format === 'online') {
+                    onlineDiscount = 5;
+                }
+
+                const totalPrice = basePrice + extraCharge - onlineDiscount;
+
+                // Qiymət təfərrüatlarını hazırlamaq
+                breakdown = `Əsas qiymət: ${basePrice}₼${premiumNote}`;
+                
+                if (extraCharge > 0) {
+                    breakdown += ` + 19:00 saatı üçün əlavə: ${extraCharge}₼`;
+                }
+                
+                if (onlineDiscount > 0) {
+                    breakdown += ` - Online endirim: ${onlineDiscount}₼`;
+                }
 
                 // Məlumatları hazırlamaq
                 const languageText = getLanguageText(language);
                 const courseTypeText = getCourseTypeText(courseType);
                 const scheduleText = getScheduleText(schedule);
+                const formatText = getFormatText(format);
 
                 // Müəllim məlumatını əlavə etmək
                 let teacherText = '';
                 if (teacher && teacherTable[language]) {
                     const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
                     if (teacherName) {
-                        teacherText = ` - Müəllim: ${teacherName}`;
+                        teacherText = ` - Müəllim: ${teacherName}${isPremiumTeacher(teacher) ? ' ⭐' : ''}`;
                     }
                 }
 
@@ -1280,7 +1032,7 @@
 
                 // Nəticəni göstərmək
                 priceAmount.textContent = `${totalPrice} ₼`;
-                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText}${teacherText}${timeText}`;
+                priceDetails.textContent = `${languageText} - ${courseTypeText} - ${scheduleText} - ${formatText}${teacherText}${timeText}`;
                 priceBreakdown.textContent = breakdown;
                 priceResult.classList.add('active');
             }
@@ -1291,12 +1043,13 @@
             const language = document.getElementById('language').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
-            
-            if (!language || !courseType || !schedule) {
+            const format = document.getElementById('format').value;
+
+            if (!language || !courseType || !schedule || !format) {
                 showNotification('Zəhmət olmasa əvvəlcə bütün sahələri doldurun', 'error');
                 return;
             }
-            
+
             updateOrderSummary();
             document.getElementById('orderModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1315,80 +1068,124 @@
             const teacher = document.getElementById('teacher').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
+            const format = document.getElementById('format').value;
             const selectedTimes = getSelectedTimes();
-            
+
             const languageText = getLanguageText(language);
             const courseTypeText = getCourseTypeText(courseType);
             const scheduleText = getScheduleText(schedule);
+            const formatText = getFormatText(format);
 
             let teacherText = '';
             if (teacher && teacherTable[language]) {
                 const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
                 if (teacherName) {
-                    teacherText = teacherName;
+                    teacherText = teacherName + (isPremiumTeacher(teacher) ? ' ⭐ ' : '');
                 }
             }
 
-            const basePrice = priceTable[language][courseType][schedule];
-            const extraCharge = (courseType === 'individual' && selectedTimes.includes('19:00')) ? 30 : 0;
-            const totalPrice = basePrice + extraCharge;
+            // Doğru qiymət cədvəlini seç
+            const currentPriceTable = getPriceTable(teacher);
+            const basePrice = currentPriceTable[language][courseType][schedule];
+            let extraCharge = 0;
+            let onlineDiscount = 0;
+
+            // 19:00 saatı üçün əlavə haqqı hesablamaq
+            if (courseType === 'individual' && selectedTimes.includes('19:00')) {
+                extraCharge = 30;
+            } else if (courseType === 'closed2' && selectedTimes.includes('19:00')) {
+                extraCharge = 20;
+            } else if (courseType === 'closed3' && selectedTimes.includes('19:00')) {
+                extraCharge = 20;
+            } else if (courseType === 'group' && selectedTimes.includes('19:00')) {
+                extraCharge = 10;
+            }
+
+            // Online endirim
+            if (format === 'online') {
+                onlineDiscount = 5;
+            }
+
+            const totalPrice = basePrice + extraCharge - onlineDiscount;
 
             let summaryHTML = `
                 <div class="order-summary-item"><strong>Dil:</strong> ${languageText}</div>
                 <div class="order-summary-item"><strong>Kurs növü:</strong> ${courseTypeText}</div>
                 <div class="order-summary-item"><strong>Cədvəl:</strong> ${scheduleText}</div>
+                <div class="order-summary-item"><strong>Format:</strong> ${formatText}</div>
             `;
-            
+
             if (teacherText) {
                 summaryHTML += `<div class="order-summary-item"><strong>Müəllim:</strong> ${teacherText}</div>`;
             }
-            
+
             if (selectedTimes.length > 0) {
                 summaryHTML += `<div class="order-summary-item"><strong>Seçilmiş vaxtlar:</strong> ${selectedTimes.join(', ')}</div>`;
             }
-            
+
             summaryHTML += `<div class="order-summary-item" style="margin-top: 10px; font-size: 1.1rem;"><strong>Ümumi qiymət: ${totalPrice} ₼</strong></div>`;
-            
+
             document.getElementById('summaryContent').innerHTML = summaryHTML;
         }
 
         async function confirmOrder() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
+
             if (!name || !phone) {
                 showNotification('Zəhmət olmasa bütün sahələri doldurun', 'error');
                 return;
             }
-            
+
             // Disable confirm button to prevent multiple submissions
             const confirmBtn = document.querySelector('.modal-btn.confirm');
             const originalText = confirmBtn.textContent;
             confirmBtn.disabled = true;
             confirmBtn.textContent = 'Göndərilir...';
-            
+
             // Get order details
             const language = document.getElementById('language').value;
             const teacher = document.getElementById('teacher').value;
             const courseType = document.getElementById('courseType').value;
             const schedule = document.getElementById('schedule').value;
+            const format = document.getElementById('format').value;
             const selectedTimes = getSelectedTimes();
-            
+
             const languageText = getLanguageText(language);
             const courseTypeText = getCourseTypeText(courseType);
             const scheduleText = getScheduleText(schedule);
+            const formatText = getFormatText(format);
 
             let teacherText = '';
             if (teacher && teacherTable[language]) {
                 const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
                 if (teacherName) {
-                    teacherText = teacherName;
+                    teacherText = teacherName + (isPremiumTeacher(teacher) ? ' ⭐ (Premium)' : '');
                 }
             }
 
-            const basePrice = priceTable[language][courseType][schedule];
-            const extraCharge = (courseType === 'individual' && selectedTimes.includes('19:00')) ? 30 : 0;
-            const totalPrice = basePrice + extraCharge;
+            // Doğru qiymət cədvəlini seç
+            const currentPriceTable = getPriceTable(teacher);
+            const basePrice = currentPriceTable[language][courseType][schedule];
+            let extraCharge = 0;
+            let onlineDiscount = 0;
+
+            // Calculate charges
+            if (courseType === 'individual' && selectedTimes.includes('19:00')) {
+                extraCharge = 30;
+            } else if (courseType === 'closed2' && selectedTimes.includes('19:00')) {
+                extraCharge = 20;
+            } else if (courseType === 'closed3' && selectedTimes.includes('19:00')) {
+                extraCharge = 20;
+            } else if (courseType === 'group' && selectedTimes.includes('19:00')) {
+                extraCharge = 10;
+            }
+
+            if (format === 'online') {
+                onlineDiscount = 5;
+            }
+
+            const totalPrice = basePrice + extraCharge - onlineDiscount;
 
             try {
                 // Send data to SheetDB
@@ -1405,6 +1202,7 @@
                             'Müəllim': teacherText || 'Seçilməyib',
                             'Kurs': courseTypeText,
                             'Cədvəl': scheduleText,
+                            'Format': formatText,
                             'Vaxtlar': selectedTimes.join(', ') || 'Seçilməyib',
                             'Qiymət': `${totalPrice} ₼`,
                             'Tarix': new Date().toLocaleDateString('az-AZ')
@@ -1421,26 +1219,35 @@
                     message += `• Dil: ${languageText}%0A`;
                     message += `• Kurs növü: ${courseTypeText}%0A`;
                     message += `• Cədvəl: ${scheduleText}%0A`;
-                    
+                    message += `• Format: ${formatText}%0A`;
+
                     if (teacherText) {
                         message += `• Müəllim: ${teacherText}%0A`;
                     }
-                    
+
                     if (selectedTimes.length > 0) {
                         message += `• Uyğun vaxtlar: ${selectedTimes.join(', ')}%0A`;
                     }
-                    
+
                     message += `%0A💰 *Ümumi Qiymət: ${totalPrice} ₼*`;
-                    
+
+                    if (teacher && isPremiumTeacher(teacher)) {
+                        message += `%0A⭐ `;
+                    }
+
                     if (extraCharge > 0) {
                         message += `%0A(19:00 saatı üçün əlavə haqqı daxildir)`;
+                    }
+
+                    if (onlineDiscount > 0) {
+                        message += `%0A(Online endirim tətbiq edilib)`;
                     }
 
                     // Open WhatsApp
                     const whatsappUrl = `https://wa.me/994552384002?text=${message}`;
                     window.open(whatsappUrl, '_blank');
                     showNotification('Sifariş uğurla göndərildi!', 'success');
-                    
+
                     closeOrderModal();
                 } else {
                     throw new Error('API sorğusunda xəta baş verdi');
@@ -1457,7 +1264,7 @@
         }
 
         // Dil dəyişdiyində müəllim və cədvəl seçimlərini yeniləmək
-        document.getElementById('language').addEventListener('change', function() {
+        document.getElementById('language').addEventListener('change', function () {
             document.getElementById('teacher').value = '';
             document.getElementById('schedule').value = '';
             updateTeachers();
@@ -1465,26 +1272,34 @@
             calculatePrice();
         });
 
+        // Müəllim dəyişdiyində cədvəl seçimlərini yeniləmək (Premium qiymətlər üçün)
+        document.getElementById('teacher').addEventListener('change', function () {
+            document.getElementById('schedule').value = '';
+            updateScheduleOptions();
+            calculatePrice();
+        });
+
         // Kurs növü dəyişdiyində cədvəl seçimini yeniləmək
-        document.getElementById('courseType').addEventListener('change', function() {
+        document.getElementById('courseType').addEventListener('change', function () {
             document.getElementById('schedule').value = '';
             updateScheduleOptions();
             calculatePrice();
         });
 
         // Close modal when clicking outside
-        document.getElementById('orderModal').addEventListener('click', function(e) {
+        document.getElementById('orderModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeOrderModal();
             }
         });
 
         // Səhifə yüklənəndə ilkin hesablama
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             calculatePrice();
         });
-        
-        const container = document.getElementById('floatingSymbolsContainer');
+
+       
+ const container = document.getElementById('floatingSymbolsContainer');
         const calculator = document.querySelector('.calculator-container');
 
         const icons = [
@@ -1522,7 +1337,7 @@
             for (let i = 0; i < numberOfIcons; i++) {
                 let icon = document.createElement('i');
                 icon.className = `fas floating-icon ${icons[Math.floor(Math.random() * icons.length)]}`;
-                
+
                 let iconSize = Math.random() * 30 + 20;
                 let left, top;
 
@@ -1547,7 +1362,14 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             placeIcons();
-        });
+        }); 
+
+
+
+
     </script>
 </body>
+
 </html>
+
+<!-- FROM LEYLA AGATALİBOVA :) -->

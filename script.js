@@ -22,7 +22,7 @@ function confirmOrder() {
                 "Kurs": courseType,
                 "Cədvəl": schedule,
                 "Vaxtlar": times,
-                "Qiymət": price
+                "Qiymət": price,
             }]
         })
     }).then(response => {
