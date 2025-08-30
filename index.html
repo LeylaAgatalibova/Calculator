@@ -1105,10 +1105,27 @@ function toggleTimeSelection(checkbox) {
             const schedule = document.getElementById('schedule').value;
             const format = document.getElementById('format').value;
 
-            if (!language || !courseType || !schedule || !format) {
-                showNotification('Zəhmət olmasa əvvəlcə bütün sahələri doldurun', 'error');
-                return;
-            }
+            // if (!language || !courseType || !schedule || !format) {
+            //     showNotification('Zəhmət olmasa əvvəlcə bütün sahələri doldurun', 'error');
+            //     return;
+            // }
+             // Seçilmiş saatları yoxla
+    const selectedTimes = Array.from(document.querySelectorAll('.time-option input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    if (!language || !courseType || !schedule || !format) {
+        showNotification('Zəhmət olmasa əvvəlcə bütün sahələri doldurun', 'error');
+        return;
+    }
+
+    if (selectedTimes.length === 0) {
+        showNotification('Zəhmət olmasa ən azı bir dərs vaxtı seçin', 'error');
+        return;
+    }
+
+    // Burada modalı açmaq üçün kod gəlir
+    console.log("Seçilmiş saatlar:", selectedTimes);
+
 
             updateOrderSummary();
             document.getElementById('orderModal').classList.add('active');
@@ -1296,7 +1313,7 @@ function toggleTimeSelection(checkbox) {
                     }
 
                     if (extraCharge > 0) {
-                        message += `%0A(19:00 saatı üçün əlavə haqqı daxildir)`;
+                        message += `%0A(19:00 saatı üçün əlavə ödəniş daxildir)`;
                     }
 
                     if (onlineDiscount > 0) {
