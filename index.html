@@ -1237,7 +1237,7 @@ function toggleTimeSelection(checkbox) {
             if (teacher && teacherTable[language]) {
                 const teacherName = teacherTable[language].find(t => t.toLowerCase() === teacher);
                 if (teacherName) {
-                    teacherText = teacherName + (isPremiumTeacher(teacher) ? ' ⭐ (Premium)' : '');
+                    teacherText = teacherName + (isPremiumTeacher(teacher) ? ' ⭐' : '');
                 }
             }
 
