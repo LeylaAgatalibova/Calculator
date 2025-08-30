@@ -65,7 +65,7 @@
                 <label for="format">Tədris formatı:</label>
                 <select id="format" onchange="calculatePrice()">
                     <option value="">Formatı seçin</option>
-                    <option value="inperson">Kursda</option>
+                    <option value="inperson">Ofisdə</option>
                     <option value="online">Online</option>
                 </select>
             </div>
@@ -80,6 +80,33 @@
             <div class="form-group">
                 <label>Sizə uyğun dərs vaxtlarını seçin :</label>
                 <div class="time-selection">
+    <div class="time-option" data-time="09:00">
+        <input type="checkbox" id="time_0900" value="09:00">
+        <label for="time_0900">09:00</label>
+    </div>
+    <div class="time-option" data-time="11:00">
+        <input type="checkbox" id="time_1100" value="11:00">
+        <label for="time_1100">11:00</label>
+    </div>
+    <div class="time-option" data-time="13:00">
+        <input type="checkbox" id="time_1300" value="13:00">
+        <label for="time_1300">13:00</label>
+    </div>
+    <div class="time-option" data-time="15:00">
+        <input type="checkbox" id="time_1500" value="15:00">
+        <label for="time_1500">15:00</label>
+    </div>
+    <div class="time-option" data-time="17:00">
+        <input type="checkbox" id="time_1700" value="17:00">
+        <label for="time_1700">17:00</label>
+    </div>
+    <div class="time-option" data-time="19:00">
+        <input type="checkbox" id="time_1900" value="19:00">
+        <label for="time_1900">19:00</label>
+    </div>
+</div>
+
+                <!-- <div class="time-selection">
                     <div class="time-option" onclick="toggleTimeSelection('09:00')">
                         <input type="checkbox" id="time_0900" value="09:00">
                         <label for="time_0900">09:00</label>
@@ -104,7 +131,7 @@
                         <input type="checkbox" id="time_1900" value="19:00">
                         <label for="time_1900">19:00</label>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="price-result" id="priceResult">
@@ -575,9 +602,9 @@
 
         // Müəllimlər cədvəli
         const teacherTable = {
-            english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.A', 'Vaqif.S', 'Ləman.M', 'Xəyalə.Ə'],
+            english: ['Leman.M', 'Mirəziz.S', 'Cəmilə.A', 'Vaqif.S', 'Ləman.M', 'Xəyalə.Ə', 'Aynur.X'],
             abituriyent: ['Cəmilə.A', 'Xəyalə.Ə'],
-            russian: ['İradə.B', 'Minarə.B', 'Gülnar.N'],
+            russian: [ 'Minarə.B', 'Gülnar.N'],
             france: ['Brilyant.Z'],
             german: ['Natiq.K'],
             ielts: ['Leman.M', 'Mirəziz.S', 'Vaqif.S',],
@@ -606,6 +633,7 @@
                 info: [
                     'Müəllimlik sahəsində 8+ il peşəkar iş təcrübəsi',
                     'TOEFL 105 nəticəsi',
+                     'IELTS 7.5 nəticəsi',
                     'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
@@ -618,7 +646,7 @@
                 name: '',
                 info: [
                     'Müəllimlik sahəsində 8+ il peşəkar iş təcrübəsi',
-
+                    'IELTS 7.5 nəticəsi',
                     'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
@@ -650,7 +678,7 @@
                 name: '',
                 info: [
                     'Müəllimlik sahəsində 15+ il peşəkar iş təcrübəsi',
-
+                    'IELTS 7.5 nəticəsi',
                     'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
@@ -664,8 +692,9 @@
             'ləman.m': {
                 name: '',
                 info: [
-                    'Müəllimlik sahəsində 2+ il peşəkar iş təcrübəsi',
+                    'Müəllimlik sahəsində 3+ il peşəkar iş təcrübəsi',
                     'TOEFL 96 nəticəsi',
+                    'IELTS 7.5 nəticəsi',
                     'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
                     'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
@@ -674,17 +703,21 @@
                     'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
                 ]
             },
-            'iradə.b': {
+            'aynur.x': {
                 name: '',
                 info: [
-                    '13+ il pedaqoji təcrübəsi',
-                    'Rus dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
+                    'Müəllimlik sahəsində 3+ il peşəkar iş təcrübəsi',
+                    'TOEFL 96 nəticəsi',
+                    'IELTS 7.5 nəticəsi',
+                    'Müxtəlif yaş qrupları ilə işləmək üzrə pedaqoji təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
-                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris metodları',
+                    'Real həyat və gündəlik situasiyalara əsaslanan praktiki tədris üsulu',
                     'Rahat, motivasiyaedici və nəticəyönümlü öyrənmə mühiti yaratma bacarığı',
-                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə öyrənmə təcrübəsi',
+                    'İnteraktiv dərslər: xəbərlər, videolar və multimedia vasitəsilə tədris bacarığı',
+                    'Akademik və gündəlik ingilis dili üzrə möhkəm bilik bazası',
                 ]
             },
+           
             'minarə.b': {
                 name: '',
                 info: [
@@ -712,7 +745,6 @@
                 info: [
                     '8+ il pedaqoji təcrübəsi',
                     'DELF/DALF sertifikatları',
-
                     'Fransız dili üzrə yüksək səviyyəli bilik və tədris bacarığı',
                     'Müxtəlif yaş qrupları ilə işləməkdə peşəkar təcrübəsi',
                     'Danışıq, qrammatika və yazı bacarıqlarının inkişafına diqqəti',
@@ -791,7 +823,7 @@
         function getFormatText(format) {
             const formatMap = {
                 'online': 'Online',
-                'inperson': 'Kursda'
+                'inperson': 'Ofisdə'
             };
             return formatMap[format] || format;
         }
@@ -845,21 +877,49 @@
         }
 
         // Vaxt seçimi funksiyası
-        function toggleTimeSelection(time) {
-            const timeId = time.replace(':', '');
-            const checkbox = document.getElementById(`time_${timeId}`);
-            const timeOption = checkbox.parentElement;
+        // function toggleTimeSelection(time) {
+        //     const timeId = time.replace(':', '');
+        //     const checkbox = document.getElementById(`time_${timeId}`);
+        //     const timeOption = checkbox.parentElement;
 
+        //     checkbox.checked = !checkbox.checked;
+
+        //     if (checkbox.checked) {
+        //         timeOption.classList.add('selected');
+        //     } else {
+        //         timeOption.classList.remove('selected');
+        //     }
+
+        //     calculatePrice();
+        // }
+// Bütün time-option div-lərinə klik eventi əlavə et
+document.querySelectorAll('.time-option').forEach(option => {
+    option.addEventListener('click', function(e) {
+        // Əgər checkbox özünə klikdirsə, əlavə toggle etmə
+        if (e.target.tagName !== 'INPUT') {
+            const checkbox = this.querySelector('input[type="checkbox"]');
             checkbox.checked = !checkbox.checked;
-
-            if (checkbox.checked) {
-                timeOption.classList.add('selected');
-            } else {
-                timeOption.classList.remove('selected');
-            }
-
-            calculatePrice();
+            toggleTimeSelection(checkbox);
         }
+    });
+});
+
+// Checkbox dəyişiklikləri üçün
+document.querySelectorAll('.time-option input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+        toggleTimeSelection(this);
+    });
+});
+
+function toggleTimeSelection(checkbox) {
+    const timeOption = checkbox.parentElement;
+    if (checkbox.checked) {
+        timeOption.classList.add('selected');
+    } else {
+        timeOption.classList.remove('selected');
+    }
+    calculatePrice();
+}
 
         // Seçilmiş vaxtları almaq
         function getSelectedTimes() {
@@ -946,17 +1006,17 @@
             const priceBreakdown = document.getElementById('priceBreakdown');
 
             // Cədvəl seçimlərini yeniləmək
-            if (!schedule) {
-                updateScheduleOptions();
-            }
+            // if (!schedule) {
+            //     updateScheduleOptions();
+            // }
 
-            if (!language || !courseType || !schedule || !format) {
-                priceAmount.textContent = '0 ₼';
-                priceDetails.textContent = 'Seçiminizi edin';
-                priceBreakdown.textContent = '';
-                priceResult.classList.remove('active');
-                return;
-            }
+            // if (!language || !courseType || !schedule || !format) {
+            //     priceAmount.textContent = '0 ₼';
+            //     priceDetails.textContent = 'Seçiminizi edin';
+            //     priceBreakdown.textContent = '';
+            //     priceResult.classList.remove('active');
+            //     return;
+            // }
 
             // Doğru qiymət cədvəlini seç (premium və ya standart)
             const currentPriceTable = getPriceTable(teacher);
